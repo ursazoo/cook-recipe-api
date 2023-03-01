@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from './prisma.service';
 import { User, Prisma } from '@prisma/client';
+import { PrismaService } from '../common/prisma.service';
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
+  // 查找特定用户
   async user(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
   ): Promise<User | null> {
@@ -14,6 +15,7 @@ export class UserService {
     });
   }
 
+  // 查找用户
   async users(params: {
     skip?: number;
     take?: number;
@@ -31,12 +33,14 @@ export class UserService {
     });
   }
 
+  // 创建用户
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
     return this.prisma.user.create({
       data,
     });
   }
 
+  // 更新用户信息
   async updateUser(params: {
     where: Prisma.UserWhereUniqueInput;
     data: Prisma.UserUpdateInput;
@@ -48,6 +52,7 @@ export class UserService {
     });
   }
 
+  // 删除用户
   async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
     return this.prisma.user.delete({
       where,
