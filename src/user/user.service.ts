@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User, Prisma } from '@prisma/client';
 import { PrismaService } from '../common/prisma.service';
+import { makeSalt, encryptPassword } from '../utils/cryptogram';
 
 @Injectable()
 export class UserService {
@@ -34,10 +35,31 @@ export class UserService {
   }
 
   // 创建用户
-  async createUser(data: Prisma.UserCreateInput): Promise<User> {
-    return this.prisma.user.create({
-      data,
-    });
+  async createUser(data: Prisma.UserCreateInput & any): Promise<User> {
+    const { name, email, passwd, repeatPassword } = data;
+    if (passwd !== repeatPassword) return;
+
+    const salt = makeSalt(); // 制作密码盐
+    const hashPwd = encryptPassword(passwd, salt); // 加密密码
+
+    console.log(data);
+
+    return this.prisma.user
+      .create({
+        data: {
+          name,
+          email,
+          passwd: hashPwd,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        return res;
+      })
+      .catch((error) => {
+        console.log(error);
+        return error;
+      });
   }
 
   // 更新用户信息

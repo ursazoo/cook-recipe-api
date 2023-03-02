@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -6,7 +6,16 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('find-one')
-  findOne(@Body() body: any) {
-    return this.userService.user(body.name);
+  findOne(@Query() query: any) {
+    console.log(query);
+    return this.userService.user(query);
+  }
+
+  @Post('create')
+  createUser(@Body() body: any) {
+    debugger;
+    console.log('==========body=====');
+    console.log(body);
+    return this.userService.createUser(body);
   }
 }
