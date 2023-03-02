@@ -5,6 +5,7 @@ import { PrismaClient } from '@prisma/client';
 export class PrismaService extends PrismaClient implements OnModuleInit {
   async onModuleInit() {
     await this.$connect();
+    console.log('数据库已连接');
   }
 
   async enableShutdownHooks(app: INestApplication) {
