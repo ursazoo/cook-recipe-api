@@ -2,6 +2,9 @@
 /dist
 /node_modules
 
+# scrert
+.env
+
 # Logs
 logs
 *.log
