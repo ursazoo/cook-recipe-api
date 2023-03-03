@@ -9,15 +9,54 @@ async function main() {
   await prisma.user.create({
     data: {
       name: 'iamzhoufei',
-      email: 'ursazoo@gmail.com',
+      email: 'ursazoo12ß@gmail.com',
+      password: '123456',
     },
   });
 
   await prisma.post.create({
     data: {
-      title: '黄豆焖双蹄',
+      title: '鸡腿娃娃菜',
       content: '<div>从入门到精通</div>',
-      authorId: 1,
+      author: {
+        create: {
+          name: 'faker',
+          email: 'faker@gmail.com',
+          password: '123456',
+        },
+      },
+      ingredients: {
+        create: [
+          {
+            name: '娃娃菜',
+            emoji: '',
+            ingredientSubType: {
+              create: {
+                name: '叶菜/花菜',
+                ingredientType: {
+                  create: {
+                    name: '绿叶蔬菜',
+                  },
+                },
+              },
+            },
+          },
+          {
+            name: '鸡腿肉',
+            emoji: '',
+            ingredientSubType: {
+              create: {
+                name: '鸡鸭鸽',
+                ingredientType: {
+                  create: {
+                    name: '肉禽蛋品',
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
     },
   });
 }
