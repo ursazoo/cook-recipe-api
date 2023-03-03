@@ -1,5 +1,5 @@
 import axios, { Method } from 'axios';
-import { getConfig } from '@/utils';
+import { getConfig } from './index';
 
 const {
   FEISHU_CONFIG: { FEISHU_URL },
