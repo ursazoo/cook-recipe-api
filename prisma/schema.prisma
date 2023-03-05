@@ -10,21 +10,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  USER
-  ADMIN
-}
+// role[用户角色]: 0-超级管理员 | 1-管理员 | 2-开发&测试&运营 | 3-普通用户（只能查看）
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String?  @unique
-  name     String?  @unique
-  account  String?  @unique
-  role     Role     @default(USER)
-  posts    Post[]
-  profile  Profile?
-  password String
-  salt     String?
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  email     String?  @unique
+  name      String?  @unique
+  account   String?  @unique
+  role      Int      @default(3)
+  posts     Post[]
+  profile   Profile?
+  password  String
+  salt      String?
 }
 
 model Profile {
@@ -37,9 +35,10 @@ model Profile {
 model Post {
   id          Int          @id @default(autoincrement())
   createdAt   DateTime     @default(now())
-  title       String
+  updatedAt   DateTime?    @updatedAt()
+  title       String       @unique
   content     String
-  author      User         @relation(fields: [authorId], references: [id])
+  author      User?        @relation(fields: [authorId], references: [id])
   authorId    Int
   ingredients Ingredient[]
 }
@@ -64,6 +63,7 @@ model IngredientSubType {
 model Ingredient {
   id                  Int               @id @default(autoincrement())
   name                String            @unique
+  times               Int?              @default(0)
   emoji               String
   posts               Post[]
   ingredientSubType   IngredientSubType @relation(fields: [ingredientSubTypeId], references: [id])
