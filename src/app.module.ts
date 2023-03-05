@@ -5,13 +5,14 @@ import { DatabaseService } from './common/database/database.service';
 
 import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
-import { TagController } from './tag/tag.controller';
-import { TagService } from './tag/tag.service';
 import { TagModule } from './tag/tag.module';
 
+import { AuthModule } from './common/auth/auth.module';
+import { UserController } from './user/user.controller';
+
 @Module({
-  imports: [UserModule, PostModule, TagModule],
-  controllers: [AppController, TagController],
-  providers: [AppService, DatabaseService, TagService],
+  imports: [AuthModule, UserModule, PostModule, TagModule],
+  controllers: [AppController, UserController],
+  providers: [AppService, DatabaseService],
 })
 export class AppModule {}

@@ -1,29 +1,39 @@
+// src/filter/any-exception.filter.ts
+/**
+ * 捕获所有异常
+ */
 import {
   ExceptionFilter,
   Catch,
   ArgumentsHost,
-  HttpStatus,
-  ServiceUnavailableException,
   HttpException,
+  HttpStatus,
 } from '@nestjs/common';
-
-// 参数为空时，默认捕获所有异常
+import { Logger } from '../../utils/log4js';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
-  catch(exception: Error, host: ArgumentsHost) {
+  catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
 
-    request.log.error(exception);
+    const status =
+      exception instanceof HttpException
+        ? exception.getStatus()
+        : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    // 非 HTTP 标准异常的处理。
-    response.status(HttpStatus.SERVICE_UNAVAILABLE).send({
-      statusCode: HttpStatus.SERVICE_UNAVAILABLE,
-      timestamp: new Date().toISOString(),
-      path: request.url,
-      message: new ServiceUnavailableException().getResponse(),
+    const logFormat = `<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+      Request original url: ${request.originalUrl}
+      Method: ${request.method}
+      IP: ${request.ip}
+      Status code: ${status}
+      Response: ${exception} \n  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    `;
+    Logger.error(logFormat);
+    response.status(status).json({
+      statusCode: status,
+      msg: `Service Error: ${exception}`,
     });
   }
 }
