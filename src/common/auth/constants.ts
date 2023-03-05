@@ -1,3 +1,3 @@
-export const jwtConstants = {
-  secret: 'shinobi7414' // 秘钥
+export const JwtConstants = {
+  secret: 'rabbitking1117', // 秘钥
 };

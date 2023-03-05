@@ -16,14 +16,10 @@ export class AuthService {
     console.log('JWT验证 - Step 2: 校验用户信息');
     const user = await this.usersService.findUser({ account });
     if (user) {
-      console.log(user);
       const hashedPassword = user.password;
       const salt = user.salt;
-      console.log(salt);
-      console.log(`user.password: ${user.password}`);
       // 通过密码盐，加密传参，再与数据库里的比较，判断是否相等
       const hashPassword = encryptPassword(password, salt);
-      console.log(`hashPassword: ${hashPassword}`);
       if (hashedPassword === hashPassword) {
         // 密码正确
         return {
@@ -48,9 +44,9 @@ export class AuthService {
   // JWT验证 - Step 3: 处理 jwt 签证
   async certificate(user: any) {
     const payload = {
-      username: user.username,
-      sub: user.userId,
-      realName: user.realName,
+      id: user.id,
+      name: user.name,
+      account: user.account,
       role: user.role,
     };
     console.log('JWT验证 - Step 3: 处理 jwt 签证');
@@ -61,12 +57,12 @@ export class AuthService {
         data: {
           token,
         },
-        msg: `登录成功`,
+        msg: '登录成功',
       };
     } catch (error) {
       return {
         code: 600,
-        msg: `账号或密码错误`,
+        msg: '账号或密码错误',
       };
     }
   }
