@@ -5,11 +5,13 @@ specifiers:
   '@nestjs/common': ^9.0.0
   '@nestjs/core': ^9.0.0
   '@nestjs/jwt': ^10.0.2
+  '@nestjs/mapped-types': '*'
   '@nestjs/passport': ^9.0.3
   '@nestjs/platform-express': ^9.0.0
   '@nestjs/schematics': ^9.0.0
   '@nestjs/testing': ^9.0.0
   '@prisma/client': ^4.11.0
+  '@types/cookie-parser': ^1.4.3
   '@types/express': ^4.17.13
   '@types/jest': 29.2.4
   '@types/node': 18.11.18
@@ -22,6 +24,7 @@ specifiers:
   chalk: ^4.1.2
   class-transformer: ^0.5.1
   class-validator: ^0.14.0
+  cookie-parser: ^1.4.6
   cross-env: ^7.0.3
   eslint: ^8.0.1
   eslint-config-prettier: ^8.3.0
@@ -50,6 +53,7 @@ dependencies:
   '@nestjs/common': 9.3.9_nza3ix4qrkhc5teka4arycjvca
   '@nestjs/core': 9.3.9_q6agyr4hwia55oswpsa7zjxcpm
   '@nestjs/jwt': 10.0.2_@nestjs+common@9.3.9
+  '@nestjs/mapped-types': 1.2.2_sm5si6oczf3vcbfl6qa276t67m
   '@nestjs/passport': 9.0.3_v3ijvyhfbmibt6kvwmic262qla
   '@nestjs/platform-express': 9.3.9_77foi4w27ghy47yutmnzv7krjy
   '@prisma/client': 4.11.0_prisma@4.11.0
@@ -64,6 +68,7 @@ devDependencies:
   '@nestjs/cli': 9.2.0
   '@nestjs/schematics': 9.0.4_typescript@4.9.5
   '@nestjs/testing': 9.3.9_yqmogfxzeu633isbftgaoi4ho4
+  '@types/cookie-parser': 1.4.3
   '@types/express': 4.17.17
   '@types/jest': 29.2.4
   '@types/node': 18.11.18
@@ -75,6 +80,7 @@ devDependencies:
   chalk: 4.1.2
   class-transformer: 0.5.1
   class-validator: 0.14.0
+  cookie-parser: 1.4.6
   cross-env: 7.0.3
   eslint: 8.35.0
   eslint-config-prettier: 8.6.0_eslint@8.35.0
@@ -983,6 +989,25 @@ packages:
       jsonwebtoken: 9.0.0
     dev: false
 
+  /@nestjs/mapped-types/1.2.2_sm5si6oczf3vcbfl6qa276t67m:
+    resolution: {integrity: sha512-3dHxLXs3M0GPiriAcCFFJQHoDFUuzTD5w6JDhE7TyfT89YKpe6tcCCIqOZWdXmt9AZjjK30RkHRSFF+QEnWFQg==}
+    peerDependencies:
+      '@nestjs/common': ^7.0.8 || ^8.0.0 || ^9.0.0
+      class-transformer: ^0.2.0 || ^0.3.0 || ^0.4.0 || ^0.5.0
+      class-validator: ^0.11.1 || ^0.12.0 || ^0.13.0 || ^0.14.0
+      reflect-metadata: ^0.1.12
+    peerDependenciesMeta:
+      class-transformer:
+        optional: true
+      class-validator:
+        optional: true
+    dependencies:
+      '@nestjs/common': 9.3.9_nza3ix4qrkhc5teka4arycjvca
+      class-transformer: 0.5.1
+      class-validator: 0.14.0
+      reflect-metadata: 0.1.13
+    dev: false
+
   /@nestjs/passport/9.0.3_v3ijvyhfbmibt6kvwmic262qla:
     resolution: {integrity: sha512-HplSJaimEAz1IOZEu+pdJHHJhQyBOPAYWXYHfAPQvRqWtw4FJF1VXl1Qtk9dcXQX1eKytDtH+qBzNQc19GWNEg==}
     peerDependencies:
@@ -1233,6 +1258,12 @@ packages:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
       '@types/node': 18.11.18
+    dev: true
+
+  /@types/cookie-parser/1.4.3:
+    resolution: {integrity: sha512-CqSKwFwefj4PzZ5n/iwad/bow2hTCh0FlNAeWLtQM3JA/NX/iYagIpWG2cf1bQKQ2c9gU2log5VUCrn7LDOs0w==}
+    dependencies:
+      '@types/express': 4.17.17
     dev: true
 
   /@types/cookiejar/2.1.2:
@@ -2194,8 +2225,21 @@ packages:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
     dev: true
 
+  /cookie-parser/1.4.6:
+    resolution: {integrity: sha512-z3IzaNjdwUC2olLIB5/ITd0/setiaFMLYiZJle7xg5Fe9KWAceil7xszYfHHBtDFYLSgJduS2Ty0P1uJdPDJeA==}
+    engines: {node: '>= 0.8.0'}
+    dependencies:
+      cookie: 0.4.1
+      cookie-signature: 1.0.6
+    dev: true
+
   /cookie-signature/1.0.6:
     resolution: {integrity: sha512-QADzlaHc8icV8I7vbaJXJwod9HWYp8uCqf1xa4OfNu1T7JVxQIrUgOWtHdNDtPiywmFbiS12VjotIXLrKM3orQ==}
+
+  /cookie/0.4.1:
+    resolution: {integrity: sha512-ZwrFkGJxUR3EIoXtO+yVE69Eb7KlixbaeAWfBQB9vVsNn/o+Yw69gBWSSDK825hQNdN+wF8zELf3dFNl/kxkUA==}
+    engines: {node: '>= 0.6'}
+    dev: true
 
   /cookie/0.5.0:
     resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
