@@ -52,10 +52,10 @@ model IngredientType {
 
 // 食材二级分类
 model IngredientSubType {
-  id               Int            @id @default(autoincrement())
-  name             String         @unique
-  ingredientType   IngredientType @relation(fields: [ingredientTypeId], references: [id])
-  ingredientTypeId Int
+  id               Int             @id @default(autoincrement())
+  name             String          @unique
+  ingredientType   IngredientType? @relation(fields: [ingredientTypeId], references: [id])
+  ingredientTypeId Int?
   ingredients      Ingredient[]
 }
 
@@ -63,7 +63,7 @@ model IngredientSubType {
 model Ingredient {
   id                  Int               @id @default(autoincrement())
   name                String            @unique
-  times               Int?              @default(0)
+  times               Int?
   emoji               String
   posts               Post[]
   ingredientSubType   IngredientSubType @relation(fields: [ingredientSubTypeId], references: [id])
