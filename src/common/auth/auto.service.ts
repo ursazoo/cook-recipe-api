@@ -53,6 +53,7 @@ export class AuthService {
     try {
       const token = this.jwtService.sign(payload);
       return {
+        success: true,
         code: 200,
         data: {
           token,
@@ -61,6 +62,7 @@ export class AuthService {
       };
     } catch (error) {
       return {
+        success: false,
         code: 600,
         msg: '账号或密码错误',
       };

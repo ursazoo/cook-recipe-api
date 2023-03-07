@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import * as express from 'express';
+import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
 
@@ -20,7 +21,7 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
 import { LoggerMiddleware } from './common/middlewares/logger/logger.middleware';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
 
   const prismaService = app.get(DatabaseService);
   await prismaService.enableShutdownHooks(app);
@@ -42,6 +43,10 @@ async function bootstrap() {
 
   // 启动全局字段校验，保证请求接口字段校验正确
   app.useGlobalPipes(new ValidationPipe());
+
+  app.use(cookieParser());
+
+  // app.enableCors();
 
   await app.listen(3000);
 }
