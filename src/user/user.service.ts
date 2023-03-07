@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User, Prisma } from '@prisma/client';
 import { DatabaseService } from '../common/database/database.service';
 import { makeSalt, encryptPassword } from '../utils/cryptogram';
+import { SignupDTO } from './user.dto';
 
 @Injectable()
 export class UserService {
@@ -25,59 +26,67 @@ export class UserService {
     });
   }
 
-  // 创建用户
-  async createUser(data: Prisma.UserCreateInput & any): Promise<User | any> {
-    const { account, name, email, password, repeatPassword } = data;
-    if (password !== repeatPassword) return;
+  // 注册
+  async signup(signupDTO: SignupDTO) {
+    const { account, name, password } = signupDTO;
 
-    const salt = makeSalt(); // 制作密码盐
-    const hashPwd = encryptPassword(password, salt); // 加密密码
+    const user = await this.findUser({ account });
 
-    const user = await this.findUserAccount(account);
-
-    if (user) {
+    if (user.data) {
       return {
         success: false,
-        data: null,
         message: '当前用户已存在',
       };
     }
 
-    return this.prisma.user
-      .create({
+    const salt = makeSalt(); // 制作密码盐
+    const hashPwd = encryptPassword(password, salt); // 加密密码
+
+    try {
+      await this.prisma.user.create({
         data: {
           name,
-          email,
           account,
           salt,
           password: hashPwd,
         },
-      })
-      .then((res) => {
-        console.log(res);
-        return res;
-      })
-      .catch((error) => {
-        console.log(error);
-        return error;
       });
+
+      return {
+        message: '注册成功',
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message,
+      };
+    }
   }
 
   // 查找特定用户
   async findUser(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-  ): Promise<User | null> {
-    return this.prisma.user.findUnique({
+  ): Promise<any> {
+    const user = await this.prisma.user.findUnique({
       where: userWhereUniqueInput,
     });
-  }
 
-  async findUserAccount(account: string): Promise<User | null> {
-    return this.prisma.user.findUnique({
-      where: {
-        account,
+    if (!user) {
+      return {
+        success: false,
+        message: '没有找到该用户',
+      };
+    }
+
+    return {
+      data: {
+        id: user.id,
+        name: user.name,
+        account: user.account,
+        createdAt: user.createdAt,
+        role: user.role,
       },
-    });
+    };
   }
 
   // 更新用户信息

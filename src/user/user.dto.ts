@@ -1,6 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class RegisterDTO {
+export class SignupDTO {
   @IsNotEmpty({ message: '账号不能为空' })
   readonly account: string;
   @IsNotEmpty({ message: '用户名不能为空' })
@@ -11,7 +11,7 @@ export class RegisterDTO {
   readonly repeatPassword: string;
 }
 
-export class LoginDTO {
+export class SigninDTO {
   @IsNotEmpty({ message: '手机号不能为空' })
   readonly account: string;
   @IsNotEmpty({ message: '密码不能为空' })
