@@ -54,9 +54,9 @@ model IngredientType {
 model IngredientSubType {
   id               Int             @id @default(autoincrement())
   name             String          @unique
+  ingredients      Ingredient[]
   ingredientType   IngredientType? @relation(fields: [ingredientTypeId], references: [id])
   ingredientTypeId Int?
-  ingredients      Ingredient[]
 }
 
 // 食材标签
