@@ -3,8 +3,8 @@
 /node_modules
 
 # scrert
-!/config/application.local.yml
-!/config/application.prod.yml
+/config/application.local.yml
+/config/application.prod.yml
 
 # Logs
 *.log
@@ -32,9 +32,7 @@ lerna-debug.log*
 
 # IDE - VSCode
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json!
-
-/.env
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions.json
