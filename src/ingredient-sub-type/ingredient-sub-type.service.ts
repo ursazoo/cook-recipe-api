@@ -1,26 +1,119 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { CreateIngredientSubTypeDto } from './dto/create-ingredient-sub-type.dto';
 import { UpdateIngredientSubTypeDto } from './dto/update-ingredient-sub-type.dto';
+import { DatabaseService } from '../common/database/database.service';
 
 @Injectable()
 export class IngredientSubTypeService {
-  create(createIngredientSubTypeDto: CreateIngredientSubTypeDto) {
-    return 'This action adds a new ingredientSubType';
+  constructor(private prisma: DatabaseService) {}
+  async create(createIngredientSubTypeDto: CreateIngredientSubTypeDto) {
+    const ingredientSubType = await this.findOne({
+      name: createIngredientSubTypeDto.name,
+    });
+
+    console.log(ingredientSubType);
+
+    if (ingredientSubType.data) {
+      return {
+        success: false,
+        message: '当前食材二级已存在',
+      };
+    }
+
+    try {
+      const createdIngredientSubType =
+        await this.prisma.ingredientSubType.create({
+          data: {
+            name: createIngredientSubTypeDto.name,
+            ingredientTypeId: Number(createIngredientSubTypeDto.ingredientTypeId),
+            // ingredients: createIngredientSubTypeDto.ingredients as any,
+          },
+        });
+
+      return {
+        data: createdIngredientSubType,
+        message: '添加食材二级分类成功',
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message,
+      };
+    }
   }
 
-  findAll() {
-    return `This action returns all ingredientSubType`;
+  async findAll(params: { where: Prisma.IngredientSubTypeWhereInput }) {
+    // const result = await this.prisma.ingredientSubType.findMany(params);
+    //
+    // return {
+    //   data: {
+    //     list: result,
+    //   },
+    // };
+
+    const result = await this.prisma.ingredientSubType.findMany({
+      where: {},
+      include: {
+        ingredientType: true,
+        ingredients: true
+      }
+    })
+
+    return {
+      data: {
+        list: result,
+      },
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} ingredientSubType`;
+  async findOne(
+    ingredientSubTypeWhereUniqueInput: Prisma.IngredientSubTypeWhereUniqueInput,
+  ) {
+    const ingredientSubType = await this.prisma.ingredientSubType.findUnique({
+      where: ingredientSubTypeWhereUniqueInput,
+    });
+
+    return {
+      data: ingredientSubType,
+    };
   }
 
-  update(id: number, updateIngredientSubTypeDto: UpdateIngredientSubTypeDto) {
-    return `This action updates a #${id} ingredientSubType`;
+  async update(
+    id: number,
+    updateIngredientSubTypeDto: UpdateIngredientSubTypeDto,
+  ) {
+    try {
+      await this.prisma.ingredientSubType.update({
+        where: { id },
+        data: updateIngredientSubTypeDto as any,
+      });
+
+      return {
+        message: '修改食材二级分类信息成功',
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message,
+      };
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} ingredientSubType`;
+  async remove(id: number) {
+    try {
+      await this.prisma.ingredientSubType.delete({
+        where: { id },
+      });
+
+      return {
+        message: '删除食材二级分类成功',
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message,
+      };
+    }
   }
 }
