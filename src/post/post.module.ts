@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { PostService } from './post.service';
 import { PostController } from './post.controller';
-import { PrismaService } from '../common/prisma.service';
+import { DatabaseService } from '../common/database/database.service';
 
 @Module({
   controllers: [PostController],
-  providers: [PostService, PrismaService],
+  providers: [PostService, DatabaseService],
   exports: [PostService],
 })
 export class PostModule {}

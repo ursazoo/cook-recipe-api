@@ -1,16 +1,33 @@
 import { Injectable } from '@nestjs/common';
 import { Post, Prisma } from '@prisma/client';
-import { PrismaService } from '../common/prisma.service';
+import { DatabaseService } from '../common/database/database.service';
 
 @Injectable()
 export class PostService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: DatabaseService) {}
 
-  async post(
-    postWhereUniqueInput: Prisma.PostWhereUniqueInput,
-  ): Promise<Post | null> {
+  // async post(
+  //   postWhereUniqueInput: Prisma.PostWhereUniqueInput,
+  // ): Promise<Post | null> {
+  //   return this.prisma.post
+  //     .findUnique({
+  //       where: postWhereUniqueInput,
+  //     })
+  //     .then((res) => {
+  //       console.logs('=====res====');
+  //       console.logs(res);
+  //       return res;
+  //     })
+  //     .catch((error) => {
+  //       console.logs(error);
+  //       return error;
+  //     });
+  // }
+  async post(id: number): Promise<Post | null> {
     return this.prisma.post.findUnique({
-      where: postWhereUniqueInput,
+      where: {
+        id,
+      },
     });
   }
 
