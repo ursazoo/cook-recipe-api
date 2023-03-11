@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseService } from './common/database/database.service';
@@ -18,6 +20,9 @@ import { CosModule } from './common/cos/cos.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     // HttpModule,
     CosModule,
     AuthModule,

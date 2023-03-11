@@ -9,18 +9,22 @@ const STS = require('qcloud-cos-sts');
 const COS = require('cos-nodejs-sdk-v5');
 
 import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
 
 // app.service.ts
 
 @Injectable()
 export class CosService {
-  constructor(private readonly httpService: HttpService) {}
-
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
+  ) {}
+  private secretId: string = this.configService.get<string>('SECRET_ID');
+  private secretKey: string = this.configService.get<string>('SECRET_KEY');
   private cos: any = {};
   private stsConfig: any = {
-    // cook-master-1315803049
-    secretId: 'AKIDFPSMVMF4ThQ3kIdntyu9It3ESm7Ri0Hn', // 固定密钥
-    secretKey: 'YwKL9ymEWYO6d2LSM7h6JNExfBNM8pMh', // 固定密钥
+    secretId: this.secretId, // 固定密钥
+    secretKey: this.secretKey, // 固定密钥
     proxy: '',
     durationSeconds: 1800, // 密钥有效期
     // host: 'sts.tencentcloudapi.com', // 域名，非必须，默认为 sts.tencentcloudapi.com
@@ -147,8 +151,8 @@ export class CosService {
       ],
     };
 
-    console.log('=======policy====')
-    console.log(JSON.stringify(policy))
+    console.log('=======policy====');
+    console.log(JSON.stringify(policy));
 
     // let result = {};
 
@@ -216,7 +220,7 @@ export class CosService {
         StorageClass: 'STANDARD',
         // Key: key /* 必须 */,
         // Body: buffer, // 上传文件对象
-        Key: '1.txt',
+        Key: '3.txt',
         Body: Buffer.from('hello!'),
         onProgress: function (progressData) {
           console.log('=====onProgress=====');
@@ -227,7 +231,7 @@ export class CosService {
         // console.log(err || data)
         const requestId = (err || data).headers['x-cos-request-id'];
 
-        console.log(`requestId: ${requestId}`);
+        // console.log(`requestId: ${requestId}`);
 
         // console.log('========error put=====');
         // console.log(err);
