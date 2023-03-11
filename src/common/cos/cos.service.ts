@@ -9,18 +9,15 @@ const STS = require('qcloud-cos-sts');
 const COS = require('cos-nodejs-sdk-v5');
 
 import { HttpService } from '@nestjs/axios';
-import { ConfigService } from '@nestjs/config';
+import { getConfig } from '../../utils';
 
 // app.service.ts
 
 @Injectable()
 export class CosService {
-  constructor(
-    private readonly httpService: HttpService,
-    private readonly configService: ConfigService,
-  ) {}
-  private secretId: string = this.configService.get<string>('SECRET_ID');
-  private secretKey: string = this.configService.get<string>('SECRET_KEY');
+  constructor(private readonly httpService: HttpService) {}
+  private secretId: string = getConfig().COS.SECRET_ID;
+  private secretKey: string = getConfig().COS.SECRET_KEY;
   private cos: any = {};
   private stsConfig: any = {
     secretId: this.secretId, // 固定密钥
