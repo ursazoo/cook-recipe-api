@@ -2,6 +2,9 @@
 /dist
 /node_modules
 
+# mysql
+deploy/mysql/db/
+
 # scrert
 /config/application.local.yml
 /config/application.prod.yml
