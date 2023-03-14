@@ -1,0 +1,45 @@
+services:
+#  mysql:
+#    image: mysql:8.0.32
+#    command: --default-authentication-plugin=mysql_native_password --lower_case_table_names=1
+#    restart: always
+#    volumes:
+#      - /root/docker/compose/mysql/data:/var/lib/mysql
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=root
+#      - MYSQL_DATABASE=tests
+#      - MYSQL_USER=prisma
+#    ports:
+#      - "3306:3306"
+
+#    networks:
+#      - my-server
+
+  server:
+    # 容器名称
+    container_name: cook-master-api
+    # 构建目录
+    build:
+      context: .
+      dockerfile: prod.Dockerfile
+    # 重启规则
+    restart: on-failure # 设置自动重启，这一步必须设置，主要是存在mysql还没有启动完成就启动了node服务
+    # 暴露端口
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    # 构建依赖
+    depends_on:
+      - mysql
+    env_file:
+      - .env
+    # 环境变量
+    environment:
+      - RUN_TIME_ENV=local
+    # 网桥
+#    networks:
+#      - my-server
+
+#  networks:
+#    my-server:
