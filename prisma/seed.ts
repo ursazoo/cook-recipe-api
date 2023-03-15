@@ -25,6 +25,7 @@ async function main() {
           password: '123456',
         },
       },
+      published: false,
       ingredients: {
         create: [
           {
