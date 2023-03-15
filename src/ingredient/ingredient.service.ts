@@ -3,6 +3,7 @@ import { Prisma } from '@prisma/client';
 import { CreateIngredientDto } from './dto/create-ingredient.dto';
 import { UpdateIngredientDto } from './dto/update-ingredient.dto';
 import { DatabaseService } from '../common/database/database.service';
+import { FindAllIngredientDto } from './dto/find-ingredient.dto';
 
 @Injectable()
 export class IngredientService {
@@ -25,7 +26,7 @@ export class IngredientService {
         data: {
           name: createIngredientDto.name,
           emoji: createIngredientDto.emoji || '',
-          times: createIngredientDto.times || 0,
+          count: createIngredientDto.count || 0,
           ingredientSubTypeId: Number(createIngredientDto.ingredientSubTypeId),
         },
       });
@@ -42,11 +43,27 @@ export class IngredientService {
     }
   }
 
-  async findAll(params: { where: Prisma.IngredientWhereInput }) {
+  async findAll(findAllIngredientDto: FindAllIngredientDto) {
     const result = await this.prisma.ingredient.findMany({
-      where: {},
-      include: {
-        ingredientSubType: true,
+      where: {
+        name: {
+          contains: findAllIngredientDto.name || '',
+        },
+        ingredientSubTypeId:
+          Number(findAllIngredientDto.ingredientSubTypeId) || {},
+      },
+      select: {
+        id: true,
+        name: true,
+        emoji: true,
+        count: true,
+        ingredientSubType: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        createdAt: true,
       },
     });
 
@@ -83,7 +100,6 @@ export class IngredientService {
         message: e.message,
       };
     }
-    // return `This action updates a #${id} ingredient`;
   }
 
   async remove(id: number) {

@@ -6,5 +6,5 @@ export class CreateIngredientDto {
   // emoji表情
   emoji?: string;
   // 选择次数
-  times: number;
+  count?: number;
 }
