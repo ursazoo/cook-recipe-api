@@ -83,7 +83,7 @@ export class UserService {
         id: user.id,
         name: user.name,
         account: user.account,
-        createdAt: user.createdAt,
+        createdAt: user.createdTime,
         role: user.role,
       },
     };

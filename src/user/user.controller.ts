@@ -16,7 +16,7 @@ export class UserController {
   findUser(
     @Query()
     query: {
-      id?: number;
+      id?: string;
       name?: string;
       email?: string;
       account?: string;
