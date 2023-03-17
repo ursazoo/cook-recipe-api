@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { CreateIngredientDto } from './dto/create-ingredient.dto';
-import { UpdateIngredientDto } from './dto/update-ingredient.dto';
+import { CreateBaseMaterialDto } from './dto/create-base-material.dto';
+import { UpdateBaseMaterialDto } from './dto/update-base-material.dto';
 import { DatabaseService } from '../common/database/database.service';
-import { FindAllIngredientDto } from './dto/find-ingredient.dto';
+import { FindAllBaseMaterialDto } from './dto/find-base-material.dto';
 
 @Injectable()
-export class IngredientService {
+export class BaseMaterialService {
   constructor(private prisma: DatabaseService) {}
-  async create(createIngredientDto: CreateIngredientDto) {
-    const ingredient = await this.prisma.ingredient.findUnique({
+  async create(createBaseMaterialDto: CreateBaseMaterialDto) {
+    const baseMaterial = await this.prisma.baseMaterial.findUnique({
       where: {
-        name: createIngredientDto.name,
+        name: createBaseMaterialDto.name,
       },
     });
 
-    if (ingredient?.id) {
+    if (baseMaterial?.id) {
       return {
         success: false,
         message: '当前食材已存在',
@@ -23,12 +23,12 @@ export class IngredientService {
     }
 
     try {
-      await this.prisma.ingredient.create({
+      await this.prisma.baseMaterial.create({
         data: {
-          name: createIngredientDto.name,
-          emoji: createIngredientDto.emoji || '',
-          count: createIngredientDto.count || 0,
-          ingredientSubTypeId: Number(createIngredientDto.ingredientSubTypeId),
+          name: createBaseMaterialDto.name,
+          emoji: createBaseMaterialDto.emoji || '',
+          count: createBaseMaterialDto.count || 0,
+          secondaryMaterialId: createBaseMaterialDto.secondaryMaterialId || '',
         },
       });
 
@@ -43,27 +43,26 @@ export class IngredientService {
     }
   }
 
-  async findAll(findAllIngredientDto: FindAllIngredientDto) {
-    const result = await this.prisma.ingredient.findMany({
+  async findAll(findAllBaseMaterialDto: FindAllBaseMaterialDto) {
+    const result = await this.prisma.baseMaterial.findMany({
       where: {
         name: {
-          contains: findAllIngredientDto.name || '',
+          contains: findAllBaseMaterialDto.name || '',
         },
-        ingredientSubTypeId:
-          Number(findAllIngredientDto.ingredientSubTypeId) || {},
+        secondaryMaterialId: findAllBaseMaterialDto.secondaryMaterialId,
       },
       select: {
         id: true,
         name: true,
         emoji: true,
         count: true,
-        ingredientSubType: {
+        secondaryMaterial: {
           select: {
             id: true,
             name: true,
           },
         },
-        createdAt: true,
+        createdTime: true,
       },
     });
 
@@ -74,21 +73,23 @@ export class IngredientService {
     };
   }
 
-  async findOne(ingredientWhereUniqueInput: Prisma.IngredientWhereUniqueInput) {
-    const ingredient = await this.prisma.user.findUnique({
-      where: ingredientWhereUniqueInput,
+  async findOne(
+    baseMaterialWhereUniqueInput: Prisma.BaseMaterialWhereUniqueInput,
+  ) {
+    const baseMaterial = await this.prisma.user.findUnique({
+      where: baseMaterialWhereUniqueInput,
     });
 
     return {
-      data: ingredient,
+      data: baseMaterial,
     };
   }
 
-  async update(id: number, updateIngredientDto: UpdateIngredientDto) {
+  async update(id: string, updateBaseMaterialDto: UpdateBaseMaterialDto) {
     try {
-      await this.prisma.ingredient.update({
+      await this.prisma.baseMaterial.update({
         where: { id },
-        data: updateIngredientDto,
+        data: updateBaseMaterialDto,
       });
 
       return {
@@ -102,9 +103,9 @@ export class IngredientService {
     }
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     try {
-      await this.prisma.ingredient.delete({
+      await this.prisma.baseMaterial.delete({
         where: { id },
       });
 

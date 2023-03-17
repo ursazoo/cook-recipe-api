@@ -8,40 +8,40 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
-import { IngredientService } from './ingredient.service';
-import { CreateIngredientDto } from './dto/create-ingredient.dto';
-import { UpdateIngredientDto } from './dto/update-ingredient.dto';
+import { BaseMaterialService } from './base-material.service';
+import { CreateBaseMaterialDto } from './dto/create-base-material.dto';
+import { UpdateBaseMaterialDto } from './dto/update-base-material.dto';
 
 @Controller('base-material')
-export class IngredientController {
-  constructor(private readonly ingredientService: IngredientService) {}
+export class BaseMaterialController {
+  constructor(private readonly baseMaterialService: BaseMaterialService) {}
 
   @Post('create')
-  async create(@Body() createIngredientDto: CreateIngredientDto) {
-    return this.ingredientService.create(createIngredientDto);
+  async create(@Body() createBaseMaterialDto: CreateBaseMaterialDto) {
+    return this.baseMaterialService.create(createBaseMaterialDto);
   }
 
   @Get('list')
   async findAll(@Query() query: any) {
     console.log(query);
-    return this.ingredientService.findAll(query);
+    return this.baseMaterialService.findAll(query);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.ingredientService.findOne({ id });
+  findOne(@Param('id') id: string) {
+    return this.baseMaterialService.findOne({ id });
   }
 
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updateIngredientDto: UpdateIngredientDto,
+    @Body() updateBaseMaterialDto: UpdateBaseMaterialDto,
   ) {
-    return this.ingredientService.update(+id, updateIngredientDto);
+    return this.baseMaterialService.update(id, updateBaseMaterialDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.ingredientService.remove(+id);
+    return this.baseMaterialService.remove(id);
   }
 }
