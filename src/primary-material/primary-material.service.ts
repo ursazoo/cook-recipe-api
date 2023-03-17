@@ -1,21 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { CreateIngredientTypeDto } from './dto/create-ingredient-type.dto';
-import { UpdateIngredientTypeDto } from './dto/update-ingredient-type.dto';
+import { CreatePrimaryMaterialDto } from './dto/create-primary-material.dto';
+import { UpdatePrimaryMaterialDto } from './dto/update-primary-material.dto';
 import { DatabaseService } from '../common/database/database.service';
 
 @Injectable()
-export class IngredientTypeService {
+export class PrimaryMaterialService {
   constructor(private prisma: DatabaseService) {}
 
-  async create(createIngredientTypeDto: CreateIngredientTypeDto) {
-    const ingredientType = await this.findOne({
-      name: createIngredientTypeDto.name,
+  async create(createPrimaryMaterialDto: CreatePrimaryMaterialDto) {
+    const primaryMaterial = await this.findOne({
+      name: createPrimaryMaterialDto.name,
     });
 
-    console.log(ingredientType);
-
-    if (ingredientType.data) {
+    if (primaryMaterial.data) {
       return {
         success: false,
         message: '当前食材已存在',
@@ -23,14 +21,14 @@ export class IngredientTypeService {
     }
 
     try {
-      const createdIngredientType = await this.prisma.ingredientType.create({
+      const createdPrimaryMaterial = await this.prisma.primaryMaterial.create({
         data: {
-          name: createIngredientTypeDto.name,
+          name: createPrimaryMaterialDto.name,
         },
       });
 
       return {
-        data: createdIngredientType,
+        data: createdPrimaryMaterial,
         message: '添加食材一级分类成功',
       };
     } catch (e) {
@@ -41,11 +39,11 @@ export class IngredientTypeService {
     }
   }
 
-  async findAll(params: { where: Prisma.IngredientTypeWhereInput }) {
-    const result = await this.prisma.ingredientType.findMany({
+  async findAll(params: { where: Prisma.PrimaryMaterialWhereInput }) {
+    const result = await this.prisma.primaryMaterial.findMany({
       where: {},
       include: {
-        ingredientSubTypes: true,
+        secondaryMaterialList: true,
       },
     });
 
@@ -57,22 +55,22 @@ export class IngredientTypeService {
   }
 
   async findOne(
-    ingredientTypeWhereUniqueInput: Prisma.IngredientTypeWhereUniqueInput,
+    primaryMaterialWhereUniqueInput: Prisma.PrimaryMaterialWhereUniqueInput,
   ) {
-    const ingredientType = await this.prisma.ingredientType.findUnique({
-      where: ingredientTypeWhereUniqueInput,
+    const primaryMaterial = await this.prisma.primaryMaterial.findUnique({
+      where: primaryMaterialWhereUniqueInput,
     });
 
     return {
-      data: ingredientType,
+      data: primaryMaterial,
     };
   }
 
-  async update(id: number, updateIngredientTypeDto: UpdateIngredientTypeDto) {
+  async update(id: string, updatePrimaryMaterialDto: UpdatePrimaryMaterialDto) {
     try {
-      await this.prisma.ingredientType.update({
+      await this.prisma.primaryMaterial.update({
         where: { id },
-        data: updateIngredientTypeDto,
+        data: updatePrimaryMaterialDto,
       });
 
       return {
@@ -86,9 +84,9 @@ export class IngredientTypeService {
     }
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     try {
-      await this.prisma.ingredientType.delete({
+      await this.prisma.primaryMaterial.delete({
         where: { id },
       });
 

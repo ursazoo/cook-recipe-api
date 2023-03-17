@@ -1,10 +1,10 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateIngredientTypeDto } from './create-ingredient-type.dto';
+import { CreatePrimaryMaterialDto } from './create-primary-material.dto';
 
-export class UpdateIngredientTypeDto extends PartialType(
-  CreateIngredientTypeDto,
+export class UpdatePrimaryMaterialDto extends PartialType(
+  CreatePrimaryMaterialDto,
 ) {
-  name: string;
+  // name: string;
 
-  ingredientSubTypeIds?: number[];
+  secondaryMaterialIds?: string[];
 }

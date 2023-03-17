@@ -7,29 +7,31 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { IngredientTypeService } from './ingredient-type.service';
-import { CreateIngredientTypeDto } from './dto/create-ingredient-type.dto';
-import { UpdateIngredientTypeDto } from './dto/update-ingredient-type.dto';
+import { PrimaryMaterialService } from './primary-material.service';
+import { CreatePrimaryMaterialDto } from './dto/create-primary-material.dto';
+import { UpdatePrimaryMaterialDto } from './dto/update-primary-material.dto';
 
 @Controller('base-material-type')
-export class IngredientTypeController {
-  constructor(private readonly ingredientTypeService: IngredientTypeService) {}
+export class PrimaryMaterialController {
+  constructor(
+    private readonly primaryMaterialService: PrimaryMaterialService,
+  ) {}
 
   @Post()
-  async create(@Body() createIngredientTypeDto: CreateIngredientTypeDto) {
-    return this.ingredientTypeService.create(createIngredientTypeDto);
+  async create(@Body() createPrimaryMaterialDto: CreatePrimaryMaterialDto) {
+    return this.primaryMaterialService.create(createPrimaryMaterialDto);
   }
 
   @Get('/list')
   async findAll() {
-    return this.ingredientTypeService.findAll({
+    return this.primaryMaterialService.findAll({
       where: {},
     });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.ingredientTypeService.findOne({
+  findOne(@Param('id') id: string) {
+    return this.primaryMaterialService.findOne({
       id,
     });
   }
@@ -37,13 +39,13 @@ export class IngredientTypeController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updateIngredientTypeDto: UpdateIngredientTypeDto,
+    @Body() ppdatePrimaryMaterialDto: UpdatePrimaryMaterialDto,
   ) {
-    return this.ingredientTypeService.update(+id, updateIngredientTypeDto);
+    return this.primaryMaterialService.update(id, ppdatePrimaryMaterialDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.ingredientTypeService.remove(id);
+  remove(@Param('id') id: string) {
+    return this.primaryMaterialService.remove(id);
   }
 }
