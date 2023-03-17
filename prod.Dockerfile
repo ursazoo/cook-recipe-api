@@ -167,4 +167,6 @@ RUN npm run build
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 
+#RUN npx prisma migrate dev
+
 CMD [ "node", "dist/src/main.js" ]

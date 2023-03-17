@@ -2,10 +2,94 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  // binaryTargets = "linux-musl-arm64-openssl-1.1.x"
+  binaryTargets = ["native", "linux-musl-arm64-openssl-1.1.x", "linux-musl-arm64-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+// role[用户角色]: 0-超级管理员 | 1-管理员 | 2-开发&测试&运营 | 3-普通用户（只能查看）
+
+model User {
+  id          String    @id @default(uuid())
+  createdTime DateTime  @default(now())
+  updatedTime DateTime? @updatedAt()
+  email       String?   @unique
+  name        String?   @unique
+  account     String?   @unique
+  role        Int       @default(3)
+  posts       Post[]
+  profile     Profile?
+  password    String
+  salt        String?
+}
+
+model Profile {
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+}
+
+model Dish {
+  id          String   @id @default(uuid())
+  createdTime DateTime @default(now())
+  remark      String?
+}
+
+// 食谱
+model Post {
+  id               String         @id @default(uuid())
+  title            String         @unique
+  content          String
+  author           User?          @relation(fields: [authorId], references: [id])
+  authorId         String
+  baseMaterialList BaseMaterial[]
+  cookWareList     Cookware[]
+  published        Boolean
+  createdTime      DateTime       @default(now())
+  updatedTime      DateTime?      @updatedAt()
+}
+
+// 食材一级分类
+model PrimaryMaterial {
+  id                    String              @id @default(uuid())
+  name                  String              @unique
+  secondaryMaterialList SecondaryMaterial[]
+  createdTime           DateTime            @default(now())
+  updatedTime           DateTime?           @updatedAt()
+}
+
+// 食材二级分类
+model SecondaryMaterial {
+  id                String           @id @default(uuid())
+  name              String           @unique
+  color             String
+  baseMaterialList  BaseMaterial[]
+  primaryMaterial   PrimaryMaterial? @relation(fields: [primaryMaterialId], references: [id])
+  primaryMaterialId String?
+  createdTime       DateTime         @default(now())
+  updatedTime       DateTime?        @updatedAt()
+}
+
+// 食材标签
+model BaseMaterial {
+  id                  String            @id @default(uuid())
+  name                String            @unique
+  count               Int?
+  emoji               String
+  posts               Post[]
+  secondaryMaterial   SecondaryMaterial @relation(fields: [secondaryMaterialId], references: [id])
+  secondaryMaterialId String
+  createdTime         DateTime          @default(now())
+  updatedTime         DateTime?         @updatedAt()
+}
+
+model Cookware {
+  id    String @id @default(uuid())
+  name  String @unique
+  posts Post[]
 }

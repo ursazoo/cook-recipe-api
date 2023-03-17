@@ -1,23 +1,29 @@
 services:
-#  mysql:
-#    image: mysql:8.0.32
-#    command: --default-authentication-plugin=mysql_native_password --lower_case_table_names=1
-#    restart: always
-#    volumes:
+  mysql:
+    container_name: app-mysql
+    image: mysql:8.0.32
+    restart: on-failure
+    build:
+      context: .
+    volumes:
 #      - /root/docker/compose/mysql/data:/var/lib/mysql
-#    environment:
-#      - MYSQL_ROOT_PASSWORD=root
-#      - MYSQL_DATABASE=tests
-#      - MYSQL_USER=prisma
-#    ports:
-#      - "3306:3306"
+      - ./deploy/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=888888
+      - MYSQL_DATABASE=cook-master
+    ports:
+      - "3306:3306"
+    command:
+      --authentication_policy=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
 
 #    networks:
 #      - my-server
 
-  server:
+  app:
     # 容器名称
-    container_name: cook-master-api
+    container_name: app
     # 构建目录
     build:
       context: .
