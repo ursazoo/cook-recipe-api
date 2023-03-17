@@ -9,9 +9,9 @@ import { CosModule } from './common/cos/cos.module';
 
 import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
-import { IngredientModule } from './ingredient/ingredient.module';
-import { IngredientTypeModule } from './ingredient-type/ingredient-type.module';
-import { IngredientSubTypeModule } from './ingredient-sub-type/ingredient-sub-type.module';
+import { BaseMaterialModule } from './base-material/base-material.module';
+import { PrimaryMaterialModule } from './primary-material/primary-material.module';
+import { SecondaryMaterialModule } from './secondary-material/secondary-material.module';
 
 import { UserController } from './user/user.controller';
 import { getConfig } from './utils';
@@ -27,9 +27,9 @@ import { getConfig } from './utils';
     AuthModule,
     UserModule,
     PostModule,
-    IngredientModule,
-    IngredientTypeModule,
-    IngredientSubTypeModule,
+    BaseMaterialModule,
+    PrimaryMaterialModule,
+    SecondaryMaterialModule,
   ],
   controllers: [AppController, UserController],
   providers: [AppService, DatabaseService],
