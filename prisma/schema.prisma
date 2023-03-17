@@ -2,80 +2,10 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider      = "prisma-client-js"
-  // binaryTargets = "linux-musl-arm64-openssl-1.1.x"
-  binaryTargets = ["native", "linux-musl-arm64-openssl-1.1.x", "linux-musl-arm64-openssl-3.0.x"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-// role[用户角色]: 0-超级管理员 | 1-管理员 | 2-开发&测试&运营 | 3-普通用户（只能查看）
-
-model User {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt()
-  email     String?   @unique
-  name      String?   @unique
-  account   String?   @unique
-  role      Int       @default(3)
-  posts     Post[]
-  profile   Profile?
-  password  String
-  salt      String?
-}
-
-model Profile {
-  id     Int  @id @default(autoincrement())
-  user   User @relation(fields: [userId], references: [id])
-  userId Int  @unique
-}
-
-// 食谱
-model Post {
-  id          Int          @id @default(autoincrement())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime?    @updatedAt()
-  title       String       @unique
-  content     String
-  author      User?        @relation(fields: [authorId], references: [id])
-  authorId    Int
-  ingredients Ingredient[]
-  published   Boolean
-}
-
-// 食材一级分类
-model IngredientType {
-  id                 Int                 @id @default(autoincrement())
-  name               String              @unique
-  ingredientSubTypes IngredientSubType[]
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime?           @updatedAt()
-}
-
-// 食材二级分类
-model IngredientSubType {
-  id               Int             @id @default(autoincrement())
-  name             String          @unique
-  ingredients      Ingredient[]
-  ingredientType   IngredientType? @relation(fields: [ingredientTypeId], references: [id])
-  ingredientTypeId Int?
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime?       @updatedAt()
-}
-
-// 食材标签
-model Ingredient {
-  id                  Int               @id @default(autoincrement())
-  name                String            @unique
-  count               Int?
-  emoji               String
-  posts               Post[]
-  ingredientSubType   IngredientSubType @relation(fields: [ingredientSubTypeId], references: [id])
-  ingredientSubTypeId Int
-  createdAt           DateTime          @default(now())
-  updatedAt           DateTime?         @updatedAt()
 }

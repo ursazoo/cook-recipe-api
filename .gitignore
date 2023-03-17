@@ -3,7 +3,7 @@
 /node_modules
 
 # mysql
-/deploy/mysql/db/
+/deploy/mysql/
 
 # scrert
 /config/application.local.yml
@@ -38,4 +38,4 @@ lerna-debug.log*
 .vscode/settings.json
 .vscode/tasks.json
 .vscode/launch.json
-.vscode/extensions.json
+.vscode/extensions.json!/deploy/mysql/
