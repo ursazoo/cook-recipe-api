@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { IngredientSubTypeService } from './ingredient-sub-type.service';
-import { IngredientSubTypeController } from './ingredient-sub-type.controller';
+import { SecondaryMaterialService } from './secondary-material.service';
+import { SecondaryMaterialController } from './secondary-material.controller';
 import { DatabaseService } from '../common/database/database.service';
 
 @Module({
-  controllers: [IngredientSubTypeController],
-  providers: [IngredientSubTypeService, DatabaseService],
+  controllers: [SecondaryMaterialController],
+  providers: [SecondaryMaterialService, DatabaseService],
 })
-export class IngredientSubTypeModule {}
+export class SecondaryMaterialModule {}

@@ -1,9 +1,11 @@
-export class CreateIngredientSubTypeDto {
+export class CreateSecondaryMaterialDto {
   name: string;
 
+  color: string;
+
   // 所属的食材一级分类
-  ingredientTypeId: number;
+  primaryMaterialId: string;
 
   // 包含的食材标签id
-  ingredients: number[];
+  // baseMaterialIdList?: string[];
 }

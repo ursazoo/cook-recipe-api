@@ -8,33 +8,33 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
-import { IngredientSubTypeService } from './ingredient-sub-type.service';
-import { CreateIngredientSubTypeDto } from './dto/create-ingredient-sub-type.dto';
-import { UpdateIngredientSubTypeDto } from './dto/update-ingredient-sub-type.dto';
-import { FindAllIngredientSubTypeDto } from "./dto/find-ingredient-sub-type.dto";
+import { SecondaryMaterialService } from './secondary-material.service';
+import { CreateSecondaryMaterialDto } from './dto/create-secondary-material.dto';
+import { UpdateSecondaryMaterialDto } from './dto/update-secondary-material.dto';
+import { FindAllSecondaryMaterialDto } from './dto/find-secondary-material.dto';
 
 @Controller('base-material-sub-type')
-export class IngredientSubTypeController {
+export class SecondaryMaterialController {
   constructor(
-    private readonly ingredientSubTypeService: IngredientSubTypeService,
+    private readonly secondaryMaterialService: SecondaryMaterialService,
   ) {}
 
   @Post('create')
-  async create(@Body() createIngredientSubTypeDto: CreateIngredientSubTypeDto) {
-    return this.ingredientSubTypeService.create(createIngredientSubTypeDto);
+  async create(@Body() createSecondaryMaterialDto: CreateSecondaryMaterialDto) {
+    return this.secondaryMaterialService.create(createSecondaryMaterialDto);
   }
 
   @Get('list')
-  async findAll(@Query() query: FindAllIngredientSubTypeDto) {
-    // return this.ingredientSubTypeService.findAll({
+  async findAll(@Query() query: FindAllSecondaryMaterialDto) {
+    // return this.secondaryMaterialService  .findAll({
     //   where: {},
     // });
-    return this.ingredientSubTypeService.findAll(query);
+    return this.secondaryMaterialService.findAll(query);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.ingredientSubTypeService.findOne({
+  findOne(@Param('id') id: string) {
+    return this.secondaryMaterialService.findOne({
       id,
     });
   }
@@ -42,16 +42,13 @@ export class IngredientSubTypeController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updateIngredientSubTypeDto: UpdateIngredientSubTypeDto,
+    @Body() updateSecondaryMaterialDto: UpdateSecondaryMaterialDto,
   ) {
-    return this.ingredientSubTypeService.update(
-      +id,
-      updateIngredientSubTypeDto,
-    );
+    return this.secondaryMaterialService.update(id, updateSecondaryMaterialDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.ingredientSubTypeService.remove(id);
+  remove(@Param('id') id: string) {
+    return this.secondaryMaterialService.remove(id);
   }
 }

@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { CreateIngredientSubTypeDto } from './dto/create-ingredient-sub-type.dto';
-import { UpdateIngredientSubTypeDto } from './dto/update-ingredient-sub-type.dto';
+import { CreateSecondaryMaterialDto } from './dto/create-secondary-material.dto';
+import { UpdateSecondaryMaterialDto } from './dto/update-secondary-material.dto';
 import { DatabaseService } from '../common/database/database.service';
-import { FindAllIngredientDto } from '../base-material/dto/find-base-material.dto';
-import { FindAllIngredientSubTypeDto } from './dto/find-ingredient-sub-type.dto';
+import { FindAllBaseMaterialDto } from '../base-material/dto/find-base-material.dto';
+import { FindAllSecondaryMaterialDto } from './dto/find-secondary-material.dto';
 
 @Injectable()
-export class IngredientSubTypeService {
+export class SecondaryMaterialService {
   constructor(private prisma: DatabaseService) {}
-  async create(createIngredientSubTypeDto: CreateIngredientSubTypeDto) {
-    const ingredientSubType = await this.findOne({
-      name: createIngredientSubTypeDto.name,
+  async create(createSecondaryMaterialDto: CreateSecondaryMaterialDto) {
+    const secondaryMaterial = await this.findOne({
+      name: createSecondaryMaterialDto.name,
     });
 
-    if (ingredientSubType.data) {
+    if (secondaryMaterial.data) {
       return {
         success: false,
         message: '当前食材二级已存在',
@@ -22,18 +22,17 @@ export class IngredientSubTypeService {
     }
 
     try {
-      const createdIngredientSubType =
-        await this.prisma.ingredientSubType.create({
+      const createdSecondaryMaterial =
+        await this.prisma.secondaryMaterial.create({
           data: {
-            name: createIngredientSubTypeDto.name,
-            ingredientTypeId: Number(
-              createIngredientSubTypeDto.ingredientTypeId,
-            ),
+            name: createSecondaryMaterialDto.name,
+            color: createSecondaryMaterialDto.color,
+            primaryMaterialId: createSecondaryMaterialDto.primaryMaterialId,
           },
         });
 
       return {
-        data: createdIngredientSubType,
+        data: createdSecondaryMaterial,
         message: '添加食材二级分类成功',
       };
     } catch (e) {
@@ -44,30 +43,19 @@ export class IngredientSubTypeService {
     }
   }
 
-  async findAll(findAllIngredientSubTypeDto: FindAllIngredientSubTypeDto) {
-    const result = await this.prisma.ingredientSubType.findMany({
-      where: {
-        // ingredients: {
-        //   // has: findAllIngredientSubTypeDto.name || '',
-        //
-        // },
-        // ingredientType: {
-        //   contains: findAllIngredientSubTypeDto?.ingredientTypeId || '',
-        // },
-        // ingredients: {
-        //   has: findAllIngredientSubTypeDto.ingredientId || '',
-        // },
-      },
+  async findAll(findAllSecondaryMaterialDto: FindAllSecondaryMaterialDto) {
+    const result = await this.prisma.secondaryMaterial.findMany({
+      where: {},
       select: {
         id: true,
         name: true,
-        ingredientType: {
+        primaryMaterial: {
           select: {
             id: true,
             name: true,
           },
         },
-        ingredients: {
+        baseMaterialList: {
           select: {
             id: true,
             name: true,
@@ -84,25 +72,25 @@ export class IngredientSubTypeService {
   }
 
   async findOne(
-    ingredientSubTypeWhereUniqueInput: Prisma.IngredientSubTypeWhereUniqueInput,
+    secondaryMaterialWhereUniqueInput: Prisma.SecondaryMaterialWhereUniqueInput,
   ) {
-    const ingredientSubType = await this.prisma.ingredientSubType.findUnique({
-      where: ingredientSubTypeWhereUniqueInput,
+    const secondaryMaterial = await this.prisma.secondaryMaterial.findUnique({
+      where: secondaryMaterialWhereUniqueInput,
     });
 
     return {
-      data: ingredientSubType,
+      data: secondaryMaterial,
     };
   }
 
   async update(
-    id: number,
-    updateIngredientSubTypeDto: UpdateIngredientSubTypeDto,
+    id: string,
+    updateSecondaryMaterialDto: UpdateSecondaryMaterialDto,
   ) {
     try {
-      await this.prisma.ingredientSubType.update({
+      await this.prisma.secondaryMaterial.update({
         where: { id },
-        data: updateIngredientSubTypeDto as any,
+        data: updateSecondaryMaterialDto,
       });
 
       return {
@@ -116,9 +104,9 @@ export class IngredientSubTypeService {
     }
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     try {
-      await this.prisma.ingredientSubType.delete({
+      await this.prisma.secondaryMaterial.delete({
         where: { id },
       });
 
