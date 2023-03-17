@@ -23,12 +23,25 @@ export class PostService {
   //       return error;
   //     });
   // }
-  async post(id: number): Promise<Post | null> {
-    return this.prisma.post.findUnique({
+  // async post(id: number): Promise<Post | null> {
+  //   return this.prisma.post.findUnique({
+  //     where: {
+  //       id,
+  //     },
+  //   });
+  // }
+
+  async findPost({ id, title }: { title?: string; id?: string }) {
+    const post = await this.prisma.post.findUnique({
       where: {
         id,
+        title,
       },
     });
+
+    return {
+      data: post,
+    };
   }
 
   async posts(params: {
@@ -48,10 +61,53 @@ export class PostService {
     });
   }
 
-  async createPost(data: Prisma.PostCreateInput): Promise<Post> {
-    return this.prisma.post.create({
-      data,
+  // async createPost(data: Prisma.PostCreateInput): Promise<Post> {
+  //   return this.prisma.post.create({
+  //     data,
+  //   });
+  // }
+  async createPost(createPostDto: any) {
+    const post = await this.findPost({
+      title: createPostDto.title,
     });
+
+    if (post.data) {
+      return {
+        success: false,
+        message: '当前菜谱已存在',
+      };
+    }
+
+    try {
+      const createdPost = await this.prisma.post.create({
+        data: {
+          title: createPostDto.title,
+          content: createPostDto.content,
+          published: createPostDto.published,
+          author: {
+            connect: { id: createPostDto.authorId },
+          },
+          baseMaterialList: {
+            connect: createPostDto.baseMaterialList.map((id: string) => ({
+              id,
+            })),
+          },
+        },
+        include: {
+          baseMaterialList: true, // Include all posts in the returned object
+        },
+      });
+
+      return {
+        data: createdPost,
+        message: '添加菜谱成功',
+      };
+    } catch (e) {
+      return {
+        success: false,
+        message: e.message,
+      };
+    }
   }
 
   async updatePost(params: {

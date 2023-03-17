@@ -5,7 +5,7 @@ import { PostService } from './post.service';
 import { RBACGuard } from '../common/guards/rbac/rbac.guard';
 import { RoleConstants } from '../common/auth/constants';
 
-import { Post as PostModel } from '@prisma/client';
+// import { Post as PostModel } from '@prisma/client';
 
 @Controller('post')
 export class PostController {
@@ -13,8 +13,10 @@ export class PostController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get(':id')
-  async findPost(@Param() param: { id: number }) {
-    return this.postService.post(Number(param.id));
+  async findPost(@Param() param: { id: string }) {
+    return this.postService.findPost({
+      id: param.id,
+    });
   }
 
   // @UseGuards(new RBACGuard(RoleConstants.ADMIN))
@@ -28,19 +30,27 @@ export class PostController {
   //   });
   // }
 
+  // 创建菜谱
   @UseGuards(new RBACGuard(RoleConstants.ADMIN))
   @UseGuards(AuthGuard('jwt'))
-  @Post()
+  @Post('/create')
   async createPost(
-    @Body() postData: { title: string; content?: string; authorId: string },
-  ): Promise<PostModel> {
-    const { title, content, authorId } = postData;
+    @Body()
+    postData: {
+      title: string;
+      published: boolean;
+      content?: string;
+      authorId: string;
+      baseMaterialIds: string[];
+    },
+  ) {
+    const { title, content, authorId, published, baseMaterialIds } = postData;
     return this.postService.createPost({
       title,
       content,
-      author: {
-        connect: { id: +authorId },
-      },
+      published,
+      authorId,
+      baseMaterialIds,
     });
   }
 }
