@@ -130,19 +130,19 @@ WORKDIR /usr/src/app
 
 COPY --chown=node:node package*.json ./
 
-RUN npm ci
+# RUN npm ci
 
 #COPY --chown=node:node /usr/src/app/node_modules ./node_modules
-
-COPY --chown=node:node . .
-
-RUN npm run build
 
 ENV NODE_ENV production
 
 RUN npm ci --only=production && npm cache clean --force
 
-RUN npx prisma generate
+COPY --chown=node:node . .
+
+# RUN npm run build
+
+# RUN npx prisma generate
 
 USER node
 
@@ -152,11 +152,11 @@ USER node
 
 FROM node:18-alpine As production
 
-#WORKDIR /usr/src/app
+WORKDIR /usr/src/app
 
-COPY --chown=node:node package*.json ./
+#COPY --chown=node:node package*.json ./
 
-RUN npm ci
+# RUN npm ci --only=production && npm cache clean --force
 
 #COPY --chown=node:node /usr/src/app/node_modules ./node_modules
 
@@ -164,9 +164,21 @@ COPY --chown=node:node . .
 
 RUN npm run build
 
-COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
+RUN npx prisma generate
+
+#COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 
 #RUN npx prisma migrate dev
 
 CMD [ "node", "dist/src/main.js" ]
+
+#FROM nginx:1.23.3-alpine as production
+#
+#COPY --from=build-stage /app/dist /usr/share/nginx/html
+#
+#COPY --from=build-stage /app/default.conf /etc/nginx/conf.d/default.conf
+#
+#EXPOSE 80
+#
+#CMD ["nginx", "-g", "daemon off;"]

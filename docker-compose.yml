@@ -39,7 +39,7 @@ services:
     depends_on:
       - mysql
     env_file:
-      - .env
+      - .env.local
     # 环境变量
     environment:
       - RUN_TIME_ENV=local

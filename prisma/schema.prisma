@@ -48,7 +48,7 @@ model Post {
   author           User?          @relation(fields: [authorId], references: [id])
   authorId         String
   baseMaterialList BaseMaterial[]
-  cookWareList     Cookware[]
+  cookwareList     Cookware[]
   published        Boolean
   createdTime      DateTime       @default(now())
   updatedTime      DateTime?      @updatedAt()
