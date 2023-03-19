@@ -15,15 +15,29 @@ export class UserService {
     cursor?: Prisma.UserWhereUniqueInput;
     where?: Prisma.UserWhereInput;
     orderBy?: Prisma.UserOrderByWithRelationInput;
-  }): Promise<User[]> {
+  }): Promise<{ data: any }> {
     const { skip, take, cursor, where, orderBy } = params;
-    return this.prisma.user.findMany({
+    const result = await this.prisma.user.findMany({
       skip,
       take,
       cursor,
       where,
       orderBy,
+      select: {
+        id: true,
+        name: true,
+      },
     });
+
+    console.log(result);
+
+    if (result) {
+      return {
+        data: {
+          list: result,
+        },
+      };
+    }
   }
 
   // 注册
@@ -40,7 +54,7 @@ export class UserService {
     }
 
     const salt = makeSalt(); // 制作密码盐
-    const hashPwd = encryptPassword(password, salt); // 加密密码
+    const hashPassword = encryptPassword(password, salt); // 加密密码
 
     try {
       await this.prisma.user.create({
@@ -48,7 +62,7 @@ export class UserService {
           name,
           account,
           salt,
-          password: hashPwd,
+          password: hashPassword,
         },
       });
 
@@ -66,10 +80,22 @@ export class UserService {
   // 查找特定用户
   async findUser(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
+    option?: any,
   ): Promise<any> {
     const user = await this.prisma.user.findUnique({
       where: userWhereUniqueInput,
+      select: {
+        id: true,
+        name: true,
+        account: true,
+        role: true,
+        createdTime: true,
+        salt: !!option?.salt,
+        password: !!option?.password,
+      },
     });
+
+    console.log(userWhereUniqueInput);
 
     if (!user) {
       return {
@@ -79,13 +105,7 @@ export class UserService {
     }
 
     return {
-      data: {
-        id: user.id,
-        name: user.name,
-        account: user.account,
-        createdAt: user.createdTime,
-        role: user.role,
-      },
+      data: user,
     };
   }
 

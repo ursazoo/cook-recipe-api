@@ -25,6 +25,11 @@ export class UserController {
     return this.userService.findUser(query);
   }
 
+  @Get('')
+  async findAllUser() {
+    return this.userService.users({});
+  }
+
   @Post('signup')
   async signup(@Body() signupDTO: SignupDTO) {
     return this.userService.signup(signupDTO);
@@ -32,6 +37,7 @@ export class UserController {
 
   @Post('signin')
   async signin(@Body() signinDTO: SigninDTO) {
+    console.log(signinDTO);
     console.log('JWT验证 - Step 1: 用户请求登录');
     const authResult = await this.authService.validateUser(
       signinDTO.account,
