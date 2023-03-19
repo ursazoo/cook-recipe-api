@@ -13,7 +13,7 @@ import { CreateSecondaryMaterialDto } from './dto/create-secondary-material.dto'
 import { UpdateSecondaryMaterialDto } from './dto/update-secondary-material.dto';
 import { FindAllSecondaryMaterialDto } from './dto/find-secondary-material.dto';
 
-@Controller('base-material-sub-type')
+@Controller('secondary-material')
 export class SecondaryMaterialController {
   constructor(
     private readonly secondaryMaterialService: SecondaryMaterialService,
@@ -26,9 +26,6 @@ export class SecondaryMaterialController {
 
   @Get('list')
   async findAll(@Query() query: FindAllSecondaryMaterialDto) {
-    // return this.secondaryMaterialService  .findAll({
-    //   where: {},
-    // });
     return this.secondaryMaterialService.findAll(query);
   }
 

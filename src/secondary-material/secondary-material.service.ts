@@ -45,10 +45,16 @@ export class SecondaryMaterialService {
 
   async findAll(findAllSecondaryMaterialDto: FindAllSecondaryMaterialDto) {
     const result = await this.prisma.secondaryMaterial.findMany({
-      where: {},
+      where: {
+        name: {
+          contains: findAllSecondaryMaterialDto.name || '',
+        },
+      },
       select: {
         id: true,
         name: true,
+        color: true,
+        createdTime: true,
         primaryMaterial: {
           select: {
             id: true,

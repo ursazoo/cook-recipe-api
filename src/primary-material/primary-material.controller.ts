@@ -11,13 +11,13 @@ import { PrimaryMaterialService } from './primary-material.service';
 import { CreatePrimaryMaterialDto } from './dto/create-primary-material.dto';
 import { UpdatePrimaryMaterialDto } from './dto/update-primary-material.dto';
 
-@Controller('base-material-type')
+@Controller('primary-material')
 export class PrimaryMaterialController {
   constructor(
     private readonly primaryMaterialService: PrimaryMaterialService,
   ) {}
 
-  @Post()
+  @Post('create')
   async create(@Body() createPrimaryMaterialDto: CreatePrimaryMaterialDto) {
     return this.primaryMaterialService.create(createPrimaryMaterialDto);
   }
@@ -39,9 +39,9 @@ export class PrimaryMaterialController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() ppdatePrimaryMaterialDto: UpdatePrimaryMaterialDto,
+    @Body() updatePrimaryMaterialDto: UpdatePrimaryMaterialDto,
   ) {
-    return this.primaryMaterialService.update(id, ppdatePrimaryMaterialDto);
+    return this.primaryMaterialService.update(id, updatePrimaryMaterialDto);
   }
 
   @Delete(':id')
