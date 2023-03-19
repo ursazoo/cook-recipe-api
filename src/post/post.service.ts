@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Post, Prisma } from '@prisma/client';
 import { DatabaseService } from '../common/database/database.service';
+import { CreatePostDto } from './dto/create-post.dto';
 
 @Injectable()
 export class PostService {
@@ -66,7 +67,7 @@ export class PostService {
   //     data,
   //   });
   // }
-  async createPost(createPostDto: any) {
+  async createPost(createPostDto: CreatePostDto) {
     const post = await this.findPost({
       title: createPostDto.title,
     });
@@ -88,18 +89,25 @@ export class PostService {
             connect: { id: createPostDto.authorId },
           },
           baseMaterialList: {
-            connect: createPostDto.baseMaterialList.map((id: string) => ({
-              id,
+            connect: createPostDto.baseMaterialIds.map((item) => ({
+              id: item,
+            })),
+          },
+          cookWareList: {
+            connect: createPostDto.cookwareIds.map((item) => ({
+              id: item,
             })),
           },
         },
         include: {
+          author: true,
           baseMaterialList: true, // Include all posts in the returned object
+          cookWareList: true,
         },
       });
 
       return {
-        data: createdPost,
+        data: null,
         message: '添加菜谱成功',
       };
     } catch (e) {

@@ -4,6 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { PostService } from './post.service';
 import { RBACGuard } from '../common/guards/rbac/rbac.guard';
 import { RoleConstants } from '../common/auth/constants';
+import { CreatePostDto } from './dto/create-post.dto';
 
 // import { Post as PostModel } from '@prisma/client';
 
@@ -31,26 +32,16 @@ export class PostController {
   // }
 
   // 创建菜谱
-  @UseGuards(new RBACGuard(RoleConstants.ADMIN))
+  // @UseGuards(new RBACGuard(RoleConstants.ADMIN))
   @UseGuards(AuthGuard('jwt'))
-  @Post('/create')
-  async createPost(
-    @Body()
-    postData: {
-      title: string;
-      published: boolean;
-      content?: string;
-      authorId: string;
-      baseMaterialIds: string[];
-    },
-  ) {
-    const { title, content, authorId, published, baseMaterialIds } = postData;
-    return this.postService.createPost({
-      title,
-      content,
-      published,
-      authorId,
-      baseMaterialIds,
-    });
+  @Post()
+  async createPost(@Body() createPostDto: CreatePostDto) {
+    return this.postService.createPost(createPostDto);
   }
+
+  // @UseGuards(AuthGuard('jwt'))
+  // @Get()
+  // async findAllPost() {
+  //   return this.postService.findAllPost({where: {}});
+  // }
 }
