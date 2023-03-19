@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { PrimaryMaterialService } from './primary-material.service';
-import { PrimaryMaterialController } from './primary-material.controller';
+import { CookwareService } from './cookware.service';
+import { CookwareController } from './cookware.controller';
 import { DatabaseService } from '../common/database/database.service';
 
 @Module({
-  controllers: [PrimaryMaterialController],
-  providers: [PrimaryMaterialService, DatabaseService],
+  controllers: [CookwareController],
+  providers: [CookwareService, DatabaseService],
 })
-export class PrimaryMaterialModule {}
+export class CookwareModule {}

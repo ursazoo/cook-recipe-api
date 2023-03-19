@@ -7,31 +7,29 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { PrimaryMaterialService } from './primary-material.service';
-import { CreatePrimaryMaterialDto } from './dto/create-primary-material.dto';
-import { UpdatePrimaryMaterialDto } from './dto/update-primary-material.dto';
+import { CookwareService } from './cookware.service';
+import { CreateCookwareDto } from './dto/create-cookware.dto';
+import { UpdateCookwareDto } from './dto/update-cookware.dto';
 
-@Controller('primary-material')
-export class PrimaryMaterialController {
-  constructor(
-    private readonly primaryMaterialService: PrimaryMaterialService,
-  ) {}
+@Controller('cookware')
+export class CookwareController {
+  constructor(private readonly cookwareService: CookwareService) {}
 
   @Post('create')
-  async create(@Body() createPrimaryMaterialDto: CreatePrimaryMaterialDto) {
-    return this.primaryMaterialService.create(createPrimaryMaterialDto);
+  async create(@Body() createCookwareDto: CreateCookwareDto) {
+    return this.cookwareService.create(createCookwareDto);
   }
 
   @Get('/list')
   async findAll() {
-    return this.primaryMaterialService.findAll({
+    return this.cookwareService.findAll({
       where: {},
     });
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.primaryMaterialService.findOne({
+    return this.cookwareService.findOne({
       id,
     });
   }
@@ -39,13 +37,13 @@ export class PrimaryMaterialController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updatePrimaryMaterialDto: UpdatePrimaryMaterialDto,
+    @Body() updateCookwareDto: UpdateCookwareDto,
   ) {
-    return this.primaryMaterialService.update(id, updatePrimaryMaterialDto);
+    return this.cookwareService.update(id, updateCookwareDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.primaryMaterialService.remove(id);
+    return this.cookwareService.remove(id);
   }
 }

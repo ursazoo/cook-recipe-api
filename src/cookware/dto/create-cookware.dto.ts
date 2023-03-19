@@ -1,4 +1,4 @@
-export class CreatePrimaryMaterialDto {
+export class CreateCookwareDto {
   // 食材一级分类名称
   name: string;
 

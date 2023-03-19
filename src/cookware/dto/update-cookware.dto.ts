@@ -1,8 +1,8 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreatePrimaryMaterialDto } from './create-primary-material.dto';
+import { CreateCookwareDto } from './create-cookware.dto';
 
-export class UpdatePrimaryMaterialDto extends PartialType(
-  CreatePrimaryMaterialDto,
+export class UpdateCookwareDto extends PartialType(
+  CreateCookwareDto,
 ) {
   // name: string;
 

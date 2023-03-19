@@ -9,6 +9,7 @@ import { CosModule } from './common/cos/cos.module';
 
 import { UserModule } from './user/user.module';
 import { PostModule } from './post/post.module';
+import { CookwareModule } from './cookware/cookware.module';
 import { BaseMaterialModule } from './base-material/base-material.module';
 import { PrimaryMaterialModule } from './primary-material/primary-material.module';
 import { SecondaryMaterialModule } from './secondary-material/secondary-material.module';
@@ -27,6 +28,7 @@ import { getConfig } from './utils';
     AuthModule,
     UserModule,
     PostModule,
+    CookwareModule,
     BaseMaterialModule,
     PrimaryMaterialModule,
     SecondaryMaterialModule,

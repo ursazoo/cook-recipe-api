@@ -1,35 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { CreatePrimaryMaterialDto } from './dto/create-primary-material.dto';
-import { UpdatePrimaryMaterialDto } from './dto/update-primary-material.dto';
+import { CreateCookwareDto } from './dto/create-cookware.dto';
+import { UpdateCookwareDto } from './dto/update-cookware.dto';
 import { DatabaseService } from '../common/database/database.service';
 
 @Injectable()
-export class PrimaryMaterialService {
+export class CookwareService {
   constructor(private prisma: DatabaseService) {}
 
-  async create(createPrimaryMaterialDto: CreatePrimaryMaterialDto) {
-    const primaryMaterial = await this.findOne({
-      name: createPrimaryMaterialDto.name,
+  async create(createCookwareDto: CreateCookwareDto) {
+    const cookware = await this.findOne({
+      name: createCookwareDto.name,
     });
 
-    if (primaryMaterial.data) {
+    if (cookware.data) {
       return {
         success: false,
-        message: '当前食材已存在',
+        message: '当前厨具已存在',
       };
     }
 
     try {
-      const createdPrimaryMaterial = await this.prisma.primaryMaterial.create({
+      const createdCookware = await this.prisma.cookware.create({
         data: {
-          name: createPrimaryMaterialDto.name,
+          name: createCookwareDto.name,
         },
       });
 
       return {
-        data: createdPrimaryMaterial,
-        message: '添加食材一级分类成功',
+        data: createdCookware,
+        message: '添加厨具成功',
       };
     } catch (e) {
       return {
@@ -39,11 +39,11 @@ export class PrimaryMaterialService {
     }
   }
 
-  async findAll(params: { where: Prisma.PrimaryMaterialWhereInput }) {
-    const result = await this.prisma.primaryMaterial.findMany({
+  async findAll(params: { where: Prisma.CookwareWhereInput }) {
+    const result = await this.prisma.cookware.findMany({
       where: {},
       include: {
-        secondaryMaterialList: true,
+        posts: true,
       },
     });
 
@@ -54,27 +54,25 @@ export class PrimaryMaterialService {
     };
   }
 
-  async findOne(
-    primaryMaterialWhereUniqueInput: Prisma.PrimaryMaterialWhereUniqueInput,
-  ) {
-    const primaryMaterial = await this.prisma.primaryMaterial.findUnique({
-      where: primaryMaterialWhereUniqueInput,
+  async findOne(cookwareWhereUniqueInput: Prisma.CookwareWhereUniqueInput) {
+    const cookware = await this.prisma.cookware.findUnique({
+      where: cookwareWhereUniqueInput,
     });
 
     return {
-      data: primaryMaterial,
+      data: cookware,
     };
   }
 
-  async update(id: string, updatePrimaryMaterialDto: UpdatePrimaryMaterialDto) {
+  async update(id: string, updateCookwareDto: UpdateCookwareDto) {
     try {
-      await this.prisma.primaryMaterial.update({
+      await this.prisma.cookware.update({
         where: { id },
-        data: updatePrimaryMaterialDto,
+        data: updateCookwareDto,
       });
 
       return {
-        message: '修改食材一级分类信息成功',
+        message: '修改厨具信息成功',
       };
     } catch (e) {
       return {
@@ -86,12 +84,12 @@ export class PrimaryMaterialService {
 
   async remove(id: string) {
     try {
-      await this.prisma.primaryMaterial.delete({
+      await this.prisma.cookware.delete({
         where: { id },
       });
 
       return {
-        message: '删除食材一级分类成功',
+        message: '删除厨具成功',
       };
     } catch (e) {
       return {
