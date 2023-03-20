@@ -14,7 +14,16 @@ export class AuthService {
   // JWT验证 - Step 2: 校验用户信息
   async validateUser(account: string, password: string): Promise<any> {
     console.log('JWT验证 - Step 2: 校验用户信息');
-    const user = await this.usersService.findUser({ account });
+    const userResult = await this.usersService.findUser(
+      { account },
+      {
+        salt: true,
+        password: true,
+      },
+    );
+    const { data: user } = userResult;
+    console.log(user);
+
     if (user) {
       const hashedPassword = user.password;
       const salt = user.salt;
@@ -43,6 +52,8 @@ export class AuthService {
 
   // JWT验证 - Step 3: 处理 jwt 签证
   async certificate(user: any) {
+    console.log('====user====')
+    console.log(user)
     const payload = {
       id: user.id,
       name: user.name,
@@ -53,18 +64,18 @@ export class AuthService {
     try {
       const token = this.jwtService.sign(payload);
       return {
-        success: true,
+        // success: true,
         code: 200,
         data: {
           token,
         },
-        msg: '登录成功',
+        message: '登录成功',
       };
     } catch (error) {
       return {
         success: false,
         code: 600,
-        msg: '账号或密码错误',
+        message: '账号或密码错误',
       };
     }
   }
