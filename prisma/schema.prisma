@@ -16,8 +16,6 @@ datasource db {
 
 model User {
   id          String    @id @default(uuid())
-  createdTime DateTime  @default(now())
-  updatedTime DateTime? @updatedAt()
   email       String?   @unique
   name        String?   @unique
   account     String?   @unique
@@ -26,6 +24,8 @@ model User {
   profile     Profile?
   password    String
   salt        String?
+  createdTime DateTime  @default(now())
+  updatedTime DateTime? @updatedAt()
 }
 
 model Profile {
@@ -49,7 +49,8 @@ model Post {
   authorId         String
   baseMaterialList BaseMaterial[]
   cookwareList     Cookware[]
-  published        Boolean
+  published        Boolean        @default(false)
+  viewCount        Int            @default(0)
   createdTime      DateTime       @default(now())
   updatedTime      DateTime?      @updatedAt()
 }
@@ -79,7 +80,7 @@ model SecondaryMaterial {
 model BaseMaterial {
   id                  String            @id @default(uuid())
   name                String            @unique
-  count               Int?
+  count               Int               @default(0)
   emoji               String
   posts               Post[]
   secondaryMaterial   SecondaryMaterial @relation(fields: [secondaryMaterialId], references: [id])
