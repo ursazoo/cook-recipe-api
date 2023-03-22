@@ -40,7 +40,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
      * data: 在没有传值的情况下，默认为 null
      * message: 只要没有抛出HTTP错误，message 就是自己定义的，默认为 success
      */
-    response.status(status).json({
+
+    console.log('====base=====')
+    response.status(status).send({
       code: status,
       success: false,
       data: null,
