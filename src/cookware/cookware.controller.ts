@@ -27,6 +27,11 @@ export class CookwareController {
     });
   }
 
+  @Get('/structured-list')
+  async findStructuredList() {
+    return this.cookwareService.findStructuredList();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.cookwareService.findOne({
