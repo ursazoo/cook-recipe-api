@@ -59,6 +59,7 @@ model Post {
 model PrimaryMaterial {
   id                    String              @id @default(uuid())
   name                  String              @unique
+  color                 String
   secondaryMaterialList SecondaryMaterial[]
   createdTime           DateTime            @default(now())
   updatedTime           DateTime?           @updatedAt()
@@ -83,6 +84,7 @@ model BaseMaterial {
   count               Int               @default(0)
   emoji               String
   posts               Post[]
+  color               String
   secondaryMaterial   SecondaryMaterial @relation(fields: [secondaryMaterialId], references: [id])
   secondaryMaterialId String
   createdTime         DateTime          @default(now())
