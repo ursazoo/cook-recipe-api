@@ -2,42 +2,64 @@ import { Injectable } from '@nestjs/common';
 import { User, Prisma } from '@prisma/client';
 import { DatabaseService } from '../common/database/database.service';
 import { makeSalt, encryptPassword } from '../utils/cryptogram';
-import { SignupDTO } from './user.dto';
+import { SignupDTO } from './dto';
+import { FindAllUserDto } from './dto/find-all-user.dto';
 
 @Injectable()
 export class UserService {
   constructor(private prisma: DatabaseService) {}
 
   // 查找用户
-  async users(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.UserWhereUniqueInput;
-    where?: Prisma.UserWhereInput;
-    orderBy?: Prisma.UserOrderByWithRelationInput;
-  }): Promise<{ data: any }> {
-    const { skip, take, cursor, where, orderBy } = params;
+  async findAllUser(findAllUserDto: FindAllUserDto): Promise<{ data: any }> {
+    // const { skip, take, cursor, where, orderBy } = findAllPostDto;
+
+    const where: any = {};
+
+    const nameQuery = {
+      contains: findAllUserDto.name,
+    };
+
+    const idQuery = {
+      contains: findAllUserDto.id,
+    };
+
+    const accountQuery = {
+      contains: findAllUserDto.account,
+    };
+
+    if (findAllUserDto?.name) {
+      where.name = nameQuery;
+    }
+
+    if (findAllUserDto?.id) {
+      where.name = idQuery;
+    }
+
+    if (findAllUserDto?.account) {
+      where.name = accountQuery;
+    }
+
     const result = await this.prisma.user.findMany({
-      skip,
-      take,
-      cursor,
+      skip: findAllUserDto.pageSize * (findAllUserDto.pageNum - 1),
+      take: findAllUserDto.pageSize,
+      // cursor,
+      orderBy: {
+        name: 'asc',
+      },
       where,
-      orderBy,
       select: {
         id: true,
         name: true,
+        account: true,
+        posts: true,
+        createdTime: true,
       },
     });
-
+    console.log('===result===');
     console.log(result);
-
-    if (result) {
-      return {
-        data: {
-          list: result,
-        },
-      };
-    }
+    return {
+      data: { list: result },
+    };
   }
 
   // 注册

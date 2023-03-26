@@ -2,8 +2,9 @@ import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { UserService } from './user.service';
-import { SigninDTO, SignupDTO } from './user.dto'; // 引入 DTO
+import { SigninDTO, SignupDTO } from './dto'; // 引入 DTO
 import { AuthService } from '../common/auth/auto.service';
+import { FindAllUserDto } from './dto/find-all-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -25,9 +26,10 @@ export class UserController {
     return this.userService.findUser(query);
   }
 
-  @Get('')
-  async findAllUser() {
-    return this.userService.users({});
+  @UseGuards(AuthGuard('jwt'))
+  @Post('/list')
+  async findAllUser(@Body() findAllUserDto: FindAllUserDto) {
+    return this.userService.findAllUser(findAllUserDto);
   }
 
   @Post('signup')
