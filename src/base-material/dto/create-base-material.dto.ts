@@ -7,4 +7,6 @@ export class CreateBaseMaterialDto {
   emoji?: string;
   // 选择次数
   count?: number;
+
+  color: string;
 }

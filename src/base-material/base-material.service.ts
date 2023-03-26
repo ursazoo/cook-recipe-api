@@ -28,6 +28,7 @@ export class BaseMaterialService {
           name: createBaseMaterialDto.name,
           emoji: createBaseMaterialDto.emoji || '',
           count: createBaseMaterialDto.count || 0,
+          color: createBaseMaterialDto.color || 'transparent',
           secondaryMaterialId: createBaseMaterialDto.secondaryMaterialId || '',
         },
       });
@@ -62,6 +63,7 @@ export class BaseMaterialService {
             name: true,
           },
         },
+        posts: true,
         createdTime: true,
       },
     });
