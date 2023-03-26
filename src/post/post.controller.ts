@@ -1,10 +1,18 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { PostService } from './post.service';
 import { RBACGuard } from '../common/guards/rbac/rbac.guard';
 import { RoleConstants } from '../common/auth/constants';
-import { CreatePostDto } from './dto/create-post.dto';
+import { ViewPostDto, CreatePostDto, FindAllPostDto, EditPostDto } from './dto';
 
 // import { Post as PostModel } from '@prisma/client';
 
@@ -12,7 +20,14 @@ import { CreatePostDto } from './dto/create-post.dto';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
+  @Post('/list')
+  async findAllPost(@Body() findAllPostDto: FindAllPostDto) {
+    console.log(findAllPostDto);
+    return this.postService.posts(findAllPostDto);
+  }
+
+  // @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   async findPost(@Param() param: { id: string }) {
     return this.postService.findPost({
@@ -39,9 +54,20 @@ export class PostController {
     return this.postService.createPost(createPostDto);
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @Patch()
+  async editPost(@Body() editPostDto: EditPostDto) {
+    return this.postService.editPost({
+      where: {
+        id: editPostDto.id,
+      },
+      editPostDto,
+    });
+  }
+
   // @UseGuards(AuthGuard('jwt'))
-  // @Get()
-  // async findAllPost() {
-  //   return this.postService.findAllPost({where: {}});
-  // }
+  @Patch('/view')
+  async viewPost(@Body() viewPostDto: ViewPostDto) {
+    return this.postService.viewPost({ where: viewPostDto });
+  }
 }
