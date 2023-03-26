@@ -22,6 +22,11 @@ export class PrimaryMaterialController {
     return this.primaryMaterialService.create(createPrimaryMaterialDto);
   }
 
+  @Get('/structured-list')
+  async findStructuredList() {
+    return this.primaryMaterialService.findStructuredList();
+  }
+
   @Get('/list')
   async findAll() {
     return this.primaryMaterialService.findAll({

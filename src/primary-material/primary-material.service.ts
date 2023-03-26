@@ -24,6 +24,8 @@ export class PrimaryMaterialService {
       const createdPrimaryMaterial = await this.prisma.primaryMaterial.create({
         data: {
           name: createPrimaryMaterialDto.name,
+          color: createPrimaryMaterialDto.color,
+          // color: createPrimaryMaterialDto.color,
         },
       });
 
@@ -37,6 +39,45 @@ export class PrimaryMaterialService {
         message: e.message,
       };
     }
+  }
+
+  async findStructuredList() {
+    const result = await this.prisma.primaryMaterial.findMany({
+      where: {},
+      select: {
+        id: true,
+        name: true,
+        color: true,
+        secondaryMaterialList: {
+          select: {
+            id: true,
+            name: true,
+            color: true,
+            baseMaterialList: {
+              select: {
+                id: true,
+                name: true,
+                emoji: true,
+                color: true,
+                secondaryMaterial: {
+                  select: {
+                    id: true,
+                    name: true,
+                    color: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return {
+      data: {
+        list: result,
+      },
+    };
   }
 
   async findAll(params: { where: Prisma.PrimaryMaterialWhereInput }) {
