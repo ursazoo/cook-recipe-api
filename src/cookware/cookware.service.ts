@@ -42,10 +42,6 @@ export class CookwareService {
   async findStructuredList() {
     const result = await this.prisma.cookware.findMany({
       where: {},
-      select: {
-        id: true,
-        name: true,
-      },
     });
 
     return {
