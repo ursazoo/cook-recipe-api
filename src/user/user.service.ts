@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Request } from 'express';
 import { User, Prisma } from '@prisma/client';
 import { DatabaseService } from '../common/database/database.service';
 import { makeSalt, encryptPassword } from '../utils/cryptogram';
@@ -52,11 +53,10 @@ export class UserService {
         name: true,
         account: true,
         posts: true,
+        role: true,
         createdTime: true,
       },
     });
-    console.log('===result===');
-    console.log(result);
     return {
       data: { list: result },
     };
@@ -148,5 +148,12 @@ export class UserService {
     return this.prisma.user.delete({
       where,
     });
+  }
+
+  //   获取当前登录的用户信息
+  async getUserInfo(request: Request): Promise<{ data: any }> {
+    return {
+      data: (request as any)?.user,
+    };
   }
 }

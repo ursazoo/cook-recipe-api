@@ -1,9 +1,19 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import { Request } from 'express';
 import { AuthGuard } from '@nestjs/passport';
+import { SigninDTO, SignupDTO } from './dto'; // 引入 DTO
 
 import { UserService } from './user.service';
-import { SigninDTO, SignupDTO } from './dto'; // 引入 DTO
 import { AuthService } from '../common/auth/auto.service';
+import { RequestIpService } from '../common/request-ip/request-ip.service';
 import { FindAllUserDto } from './dto/find-all-user.dto';
 
 @Controller('user')
@@ -11,6 +21,7 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
+    private readonly requestIpService: RequestIpService,
   ) {}
 
   @Get('find-user')
@@ -38,7 +49,7 @@ export class UserController {
   }
 
   @Post('signin')
-  async signin(@Body() signinDTO: SigninDTO) {
+  async signin(@Req() request: Request, @Body() signinDTO: SigninDTO) {
     console.log(signinDTO);
     console.log('JWT验证 - Step 1: 用户请求登录');
     const authResult = await this.authService.validateUser(
@@ -47,6 +58,8 @@ export class UserController {
     );
     switch (authResult.code) {
       case 1:
+        const ip = this.requestIpService.recordIp(request);
+        console.log(ip);
         return this.authService.certificate(authResult.user);
       case 2:
         return {
@@ -67,5 +80,13 @@ export class UserController {
   @Post('update')
   async updateUser(@Body() body: any) {
     return this.userService.updateUser(body);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('/info')
+  async getUserInfo(@Req() request: Request) {
+    console.log('user', (request as any)?.user);
+    return this.userService.getUserInfo(request);
+    // return (request as any)?.user || {};
   }
 }
