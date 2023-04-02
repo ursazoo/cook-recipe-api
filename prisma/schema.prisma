@@ -92,7 +92,9 @@ model BaseMaterial {
 }
 
 model Cookware {
-  id    String @id @default(uuid())
-  name  String @unique
-  posts Post[]
+  id          String    @id @default(uuid())
+  name        String    @unique
+  posts       Post[]
+  createdTime DateTime  @default(now())
+  updatedTime DateTime? @updatedAt()
 }
