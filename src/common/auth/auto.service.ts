@@ -22,6 +22,7 @@ export class AuthService {
       },
     );
     const { data: user } = userResult;
+    console.log('=====validateUser======');
     console.log(user);
 
     if (user) {
@@ -52,13 +53,14 @@ export class AuthService {
 
   // JWT验证 - Step 3: 处理 jwt 签证
   async certificate(user: any) {
-    console.log('====user====')
-    console.log(user)
+    console.log('====user====');
+    console.log(user);
     const payload = {
       id: user.id,
       name: user.name,
       account: user.account,
       role: user.role,
+      createdTime: user.createdTime,
     };
     console.log('JWT验证 - Step 3: 处理 jwt 签证');
     try {
