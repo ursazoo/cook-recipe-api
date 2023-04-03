@@ -16,6 +16,7 @@ import { SecondaryMaterialModule } from './secondary-material/secondary-material
 
 import { UserController } from './user/user.controller';
 import { getConfig } from './utils';
+import { RequestIpService } from './common/request-ip/request-ip.service';
 
 @Module({
   imports: [
@@ -34,6 +35,6 @@ import { getConfig } from './utils';
     SecondaryMaterialModule,
   ],
   controllers: [AppController, UserController],
-  providers: [AppService, DatabaseService],
+  providers: [AppService, DatabaseService, RequestIpService],
 })
 export class AppModule {}
