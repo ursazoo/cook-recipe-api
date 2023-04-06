@@ -8,7 +8,9 @@
   "scripts": {
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
-    "prisma:rename": "npx prisma migrate dev --name rename-migration --create-only",
+    "prisma:generate": "prisma generate",
+    "prisma:update": "npx prisma migrate dev --name update-migration --create-only",
+    "prisma:apply": "npx prisma migrate deploy --preview-feature",
     "mysql:backup": "docker exec <CONTAINER_ID> /usr/bin/mysqldump -u <MYSQL_USER> --password=<MYSQL_PASSWORD> <MYSQL_DATABASE> > backup.sql",
     "mysql:recover": "mysql -u <MYSQL_USER> -p<MYSQL_PASSWORD> <MYSQL_DATABASE> < /backup.sql",
     "build": "nest build",
