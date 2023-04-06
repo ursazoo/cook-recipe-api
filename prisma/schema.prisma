@@ -44,7 +44,7 @@ model Dish {
 model Post {
   id               String         @id @default(uuid())
   title            String         @unique
-  content          String
+  content          String         @db.LongText
   author           User?          @relation(fields: [authorId], references: [id])
   authorId         String
   baseMaterialList BaseMaterial[]
