@@ -72,16 +72,7 @@ export class PostService {
 
   async posts(
     findAllPostDto: FindAllPostDto,
-    // params: {
-    //   skip?: number;
-    //   take?: number;
-    //   cursor?: Prisma.PostWhereUniqueInput;
-    //   where?: Prisma.PostWhereInput;
-    //   orderBy?: Prisma.PostOrderByWithRelationInput;
-    // } & FindAllPostDto,
   ): Promise<{ data: { list: any } }> {
-    // const { skip, take, cursor, where, orderBy } = findAllPostDto;
-
     const where: any = {};
 
     const titleQuery = {
@@ -124,35 +115,37 @@ export class PostService {
       where.cookwareList = cookwareListQuery;
     }
 
+    const select: any = {
+      id: true,
+      title: true,
+      author: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    };
+
+    if (findAllPostDto.withDetail) {
+      select.cookwareList = true;
+      select.baseMaterialList = {
+        select: {
+          id: true,
+          name: true,
+          emoji: true,
+        },
+      };
+    }
+
     const result = await this.prisma.post.findMany({
       skip: findAllPostDto.pageSize * (findAllPostDto.pageNum - 1),
       take: findAllPostDto.pageSize,
-      // cursor,
       orderBy: {
         title: 'asc',
       },
       where,
-      select: {
-        id: true,
-        title: true,
-        cookwareList: true,
-        author: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-        baseMaterialList: {
-          select: {
-            id: true,
-            name: true,
-            emoji: true,
-          },
-        },
-      },
+      select,
     });
-    console.log('===result===');
-    console.log(result);
     return {
       data: { list: result },
     };
