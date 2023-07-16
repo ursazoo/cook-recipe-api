@@ -1,5 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import * as express from 'express';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
 // import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
@@ -33,7 +35,7 @@ async function bootstrap() {
   app.use(LoggerMiddleware);
 
   // 设置全局路由前缀
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('');
 
   // 增加全局异常处理
   app.useGlobalFilters(new AllExceptionsFilter(), new HttpExceptionFilter());
@@ -47,6 +49,15 @@ async function bootstrap() {
   // app.use(cookieParser());
 
   // app.enableCors();
+
+  const options = new DocumentBuilder()
+    .setTitle('接口文档')
+    .setDescription('描述信息')
+    .setVersion('1.0.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+
+  SwaggerModule.setup('/docs', app, document);
 
   await app.listen(9000);
 }
