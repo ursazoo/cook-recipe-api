@@ -15,7 +15,7 @@ datasource db {
 // role[用户角色]: 0-超级管理员 | 1-管理员 | 2-开发&测试&运营 | 3-普通用户（只能查看）
 
 model User {
-  id          String    @id @default(uuid())
+  id          Int       @id @default(autoincrement())
   email       String?   @unique
   name        String?   @unique
   account     String?   @unique
@@ -29,24 +29,24 @@ model User {
 }
 
 model Profile {
-  id     String @id @default(uuid())
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @unique
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
 }
 
 model Dish {
-  id          String   @id @default(uuid())
+  id          Int      @id @default(autoincrement())
   createdTime DateTime @default(now())
   remark      String?
 }
 
 // 食谱
 model Post {
-  id               String         @id @default(uuid())
+  id               Int            @id @default(autoincrement())
   title            String         @unique
   content          String         @db.LongText
   author           User?          @relation(fields: [authorId], references: [id])
-  authorId         String
+  authorId         Int
   baseMaterialList BaseMaterial[]
   cookwareList     Cookware[]
   published        Boolean        @default(false)
@@ -57,7 +57,7 @@ model Post {
 
 // 食材一级分类
 model PrimaryMaterial {
-  id                    String              @id @default(uuid())
+  id                    Int                 @id @default(autoincrement())
   name                  String              @unique
   color                 String
   secondaryMaterialList SecondaryMaterial[]
@@ -67,32 +67,32 @@ model PrimaryMaterial {
 
 // 食材二级分类
 model SecondaryMaterial {
-  id                String           @id @default(uuid())
+  id                Int              @id @default(autoincrement())
   name              String           @unique
   color             String
   baseMaterialList  BaseMaterial[]
   primaryMaterial   PrimaryMaterial? @relation(fields: [primaryMaterialId], references: [id])
-  primaryMaterialId String?
+  primaryMaterialId Int?
   createdTime       DateTime         @default(now())
   updatedTime       DateTime?        @updatedAt()
 }
 
 // 食材标签
 model BaseMaterial {
-  id                  String            @id @default(uuid())
+  id                  Int               @id @default(autoincrement())
   name                String            @unique
   count               Int               @default(0)
   emoji               String
   posts               Post[]
   color               String
   secondaryMaterial   SecondaryMaterial @relation(fields: [secondaryMaterialId], references: [id])
-  secondaryMaterialId String
+  secondaryMaterialId Int
   createdTime         DateTime          @default(now())
   updatedTime         DateTime?         @updatedAt()
 }
 
 model Cookware {
-  id          String    @id @default(uuid())
+  id          Int       @id @default(autoincrement())
   name        String    @unique
   posts       Post[]
   createdTime DateTime  @default(now())
