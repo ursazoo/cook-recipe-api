@@ -29,20 +29,20 @@ export class BaseMaterialController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.baseMaterialService.findOne({ id });
   }
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateBaseMaterialDto: UpdateBaseMaterialDto,
   ) {
     return this.baseMaterialService.update(id, updateBaseMaterialDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.baseMaterialService.remove(id);
   }
 }

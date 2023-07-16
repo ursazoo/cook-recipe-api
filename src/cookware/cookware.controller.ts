@@ -33,7 +33,7 @@ export class CookwareController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.cookwareService.findOne({
       id,
     });
@@ -41,14 +41,14 @@ export class CookwareController {
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateCookwareDto: UpdateCookwareDto,
   ) {
     return this.cookwareService.update(id, updateCookwareDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.cookwareService.remove(id);
   }
 }

@@ -107,7 +107,7 @@ export class PrimaryMaterialService {
     };
   }
 
-  async update(id: string, updatePrimaryMaterialDto: UpdatePrimaryMaterialDto) {
+  async update(id: number, updatePrimaryMaterialDto: UpdatePrimaryMaterialDto) {
     try {
       await this.prisma.primaryMaterial.update({
         where: { id },
@@ -125,7 +125,7 @@ export class PrimaryMaterialService {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: number) {
     try {
       await this.prisma.primaryMaterial.delete({
         where: { id },

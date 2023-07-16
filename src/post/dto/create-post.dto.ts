@@ -7,9 +7,9 @@ export class CreatePostDto {
   published: boolean;
   content?: string;
   @IsNotEmpty({ message: '作者不能为空' })
-  authorId: string;
+  authorId: number;
   @IsNotEmpty({ message: '基础材料不能为空' })
-  baseMaterialIds: string[];
+  baseMaterialIds: number[];
   @IsNotEmpty({ message: '厨具不能为空' })
-  cookwareIds: string[];
+  cookwareIds: number[];
 }

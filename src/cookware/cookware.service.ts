@@ -76,7 +76,7 @@ export class CookwareService {
     };
   }
 
-  async update(id: string, updateCookwareDto: UpdateCookwareDto) {
+  async update(id: number, updateCookwareDto: UpdateCookwareDto) {
     try {
       await this.prisma.cookware.update({
         where: { id },
@@ -94,7 +94,7 @@ export class CookwareService {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: number) {
     try {
       await this.prisma.cookware.delete({
         where: { id },

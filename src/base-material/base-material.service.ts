@@ -29,7 +29,7 @@ export class BaseMaterialService {
           emoji: createBaseMaterialDto.emoji || '',
           count: createBaseMaterialDto.count || 0,
           color: createBaseMaterialDto.color || 'transparent',
-          secondaryMaterialId: createBaseMaterialDto.secondaryMaterialId || '',
+          secondaryMaterialId: createBaseMaterialDto.secondaryMaterialId,
         },
       });
 
@@ -87,7 +87,7 @@ export class BaseMaterialService {
     };
   }
 
-  async update(id: string, updateBaseMaterialDto: UpdateBaseMaterialDto) {
+  async update(id: number, updateBaseMaterialDto: UpdateBaseMaterialDto) {
     try {
       await this.prisma.baseMaterial.update({
         where: { id },
@@ -105,7 +105,7 @@ export class BaseMaterialService {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: number) {
     try {
       await this.prisma.baseMaterial.delete({
         where: { id },

@@ -35,7 +35,7 @@ export class PrimaryMaterialController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.primaryMaterialService.findOne({
       id,
     });
@@ -43,14 +43,14 @@ export class PrimaryMaterialController {
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updatePrimaryMaterialDto: UpdatePrimaryMaterialDto,
   ) {
     return this.primaryMaterialService.update(id, updatePrimaryMaterialDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.primaryMaterialService.remove(id);
   }
 }

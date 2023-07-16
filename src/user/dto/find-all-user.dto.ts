@@ -6,7 +6,7 @@ export class FindAllUserDto {
   @IsNotEmpty({ message: 'pageSize不可为空' })
   pageSize: number;
   name?: string;
-  id?: string;
+  id?: number;
   account?: string;
   email?: string;
   mobile?: string;

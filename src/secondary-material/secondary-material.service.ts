@@ -90,7 +90,7 @@ export class SecondaryMaterialService {
   }
 
   async update(
-    id: string,
+    id: number,
     updateSecondaryMaterialDto: UpdateSecondaryMaterialDto,
   ) {
     try {
@@ -110,7 +110,7 @@ export class SecondaryMaterialService {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: number) {
     try {
       await this.prisma.secondaryMaterial.delete({
         where: { id },

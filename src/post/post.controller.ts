@@ -29,7 +29,7 @@ export class PostController {
 
   // @UseGuards(AuthGuard('jwt'))
   @Get(':id')
-  async findPost(@Param() param: { id: string }) {
+  async findPost(@Param() param: { id: number }) {
     return this.postService.findPost({
       id: param.id,
     });

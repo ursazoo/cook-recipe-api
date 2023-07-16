@@ -32,7 +32,7 @@ export class PostService {
   //   });
   // }
 
-  async findPost({ id, title }: { title?: string; id?: string }) {
+  async findPost({ id, title }: { title?: string; id?: number }) {
     const post = await this.prisma.post.findUnique({
       where: {
         id,

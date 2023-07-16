@@ -5,5 +5,5 @@ export class UpdateSecondaryMaterialDto extends PartialType(
   CreateSecondaryMaterialDto,
 ) {
   name: string;
-  baseMaterialIds: string[];
+  baseMaterialIds: number[];
 }

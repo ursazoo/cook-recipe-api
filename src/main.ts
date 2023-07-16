@@ -21,6 +21,7 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
 
 // 日志中间件
 import { LoggerMiddleware } from './common/middlewares/logger/logger.middleware';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
@@ -59,6 +60,21 @@ async function bootstrap() {
 
   SwaggerModule.setup('/docs', app, document);
 
-  await app.listen(9000);
+  const configService = app.get(ConfigService); // 获取全局配置
+
+  const PORT = configService.get<number>('PORT', 9000);
+  const HOST = configService.get('HOST', 'localhost');
+
+  await app.listen(PORT, () => {
+    if (HOST === 'localhost') {
+      console.log(
+        `服务已经启动，查看接口文档请访问:http://localhost:${PORT}/docs`,
+      );
+    } else {
+      console.log(
+        `服务已经启动，查看接口文档请访问:https://${HOST}:${PORT}/docs`,
+      );
+    }
+  });
 }
 bootstrap();
