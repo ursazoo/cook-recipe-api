@@ -41,7 +41,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
      * message: 只要没有抛出HTTP错误，message 就是自己定义的，默认为 success
      */
 
-    console.log('====base=====')
+    console.log('====base=====');
     response.status(status).send({
       code: status,
       success: false,
