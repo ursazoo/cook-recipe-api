@@ -1,23 +1,23 @@
 // src/utils/log4js.ts
-import * as Path from 'path';
-import * as Log4js from 'log4js';
-import * as Util from 'util';
-import * as Moment from 'moment'; // 处理时间的工具
-import * as StackTrace from 'stacktrace-js';
-import Chalk from 'chalk';
-import { log4jsConfig } from '../../config/log4js';
+import * as Path from "path";
+import * as Log4js from "log4js";
+import * as Util from "util";
+import * as Moment from "moment"; // 处理时间的工具
+import * as StackTrace from "stacktrace-js";
+import Chalk from "chalk";
+import { log4jsConfig } from "../../config/log4js";
 
 // 日志级别
 export enum LoggerLevel {
-  ALL = 'ALL',
-  MARK = 'MARK',
-  TRACE = 'TRACE',
-  DEBUG = 'DEBUG',
-  INFO = 'INFO',
-  WARN = 'WARN',
-  ERROR = 'ERROR',
-  FATAL = 'FATAL',
-  OFF = 'OFF',
+  ALL = "ALL",
+  MARK = "MARK",
+  TRACE = "TRACE",
+  DEBUG = "DEBUG",
+  INFO = "INFO",
+  WARN = "WARN",
+  ERROR = "ERROR",
+  FATAL = "FATAL",
+  OFF = "OFF",
 }
 
 // 内容跟踪类
@@ -26,14 +26,15 @@ export class ContextTrace {
     public readonly context: string,
     public readonly path?: string,
     public readonly lineNumber?: number,
-    public readonly columnNumber?: number,
-  ) {}
+    public readonly columnNumber?: number
+  ) {
+  }
 }
 
-Log4js.addLayout('Awesome-nest', (logConfig: any) => {
+Log4js.addLayout("Awesome-nest", (logConfig: any) => {
   return (logEvent: Log4js.LoggingEvent): string => {
-    let moduleName = '';
-    let position = '';
+    let moduleName = "";
+    let position = "";
 
     // 日志组装
     const messageList: string[] = [];
@@ -47,7 +48,7 @@ Log4js.addLayout('Awesome-nest', (logConfig: any) => {
         return;
       }
 
-      if (typeof value !== 'string') {
+      if (typeof value !== "string") {
         value = Util.inspect(value, false, 3, true);
       }
 
@@ -55,15 +56,15 @@ Log4js.addLayout('Awesome-nest', (logConfig: any) => {
     });
 
     // 日志组成部分
-    const messageOutput: string = messageList.join(' ');
-    const positionOutput: string = position ? ` [${position}]` : '';
+    const messageOutput: string = messageList.join(" ");
+    const positionOutput: string = position ? ` [${position}]` : "";
     const typeOutput = `[${logConfig.type}] ${logEvent.pid.toString()}   - `;
     const dateOutput = `${Moment(logEvent.startTime).format(
-      'YYYY-MM-DD HH:mm:ss',
+      "YYYY-MM-DD HH:mm:ss"
     )}`;
     const moduleOutput: string = moduleName
       ? `[${moduleName}] `
-      : '[LoggerService] ';
+      : "[LoggerService] ";
     let levelOutput = `[${logEvent.level}] ${messageOutput}`;
 
     // 根据日志级别，用不同颜色区分
@@ -81,7 +82,7 @@ Log4js.addLayout('Awesome-nest', (logConfig: any) => {
         levelOutput = Chalk.red(levelOutput);
         break;
       case LoggerLevel.FATAL:
-        levelOutput = Chalk.hex('#DD4C35')(levelOutput);
+        levelOutput = Chalk.hex("#DD4C35")(levelOutput);
         break;
       default:
         levelOutput = Chalk.grey(levelOutput);
@@ -89,7 +90,7 @@ Log4js.addLayout('Awesome-nest', (logConfig: any) => {
     }
 
     return `${Chalk.green(typeOutput)}${dateOutput}  ${Chalk.yellow(
-      moduleOutput,
+      moduleOutput
     )}${levelOutput}${positionOutput}`;
   };
 });
@@ -135,7 +136,7 @@ export class Logger {
   }
 
   static access(...args) {
-    const loggerCustom = Log4js.getLogger('http');
+    const loggerCustom = Log4js.getLogger("http");
     loggerCustom.info(Logger.getStackTrace(), ...args);
   }
 

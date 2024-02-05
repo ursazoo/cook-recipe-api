@@ -1,11 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { Post, Prisma } from '@prisma/client';
-import { DatabaseService } from '../common/database/database.service';
-import { CreatePostDto, FindAllPostDto, EditPostDto } from './dto';
+import { Injectable } from "@nestjs/common";
+import { Post, Prisma } from "@prisma/client";
+import { DatabaseService } from "../common/database/database.service";
+import { CreatePostDto, EditPostDto, FindAllPostDto } from "./dto";
 
 @Injectable()
 export class PostService {
-  constructor(private prisma: DatabaseService) {}
+  constructor(private prisma: DatabaseService) {
+  }
 
   // async post(
   //   postWhereUniqueInput: Prisma.PostWhereUniqueInput,
@@ -36,7 +37,7 @@ export class PostService {
     const post = await this.prisma.post.findUnique({
       where: {
         id,
-        title,
+        title
       },
       select: {
         id: true,
@@ -46,8 +47,8 @@ export class PostService {
         author: {
           select: {
             id: true,
-            name: true,
-          },
+            name: true
+          }
         },
         baseMaterialList: {
           select: {
@@ -57,46 +58,46 @@ export class PostService {
             secondaryMaterial: {
               select: {
                 id: true,
-                name: true,
-              },
-            },
-          },
-        },
-      },
+                name: true
+              }
+            }
+          }
+        }
+      }
     });
 
     return {
-      data: post,
+      data: post
     };
   }
 
   async posts(
-    findAllPostDto: FindAllPostDto,
+    findAllPostDto: FindAllPostDto
   ): Promise<{ data: { list: any } }> {
     const where: any = {};
 
     const titleQuery = {
-      contains: findAllPostDto.title,
+      contains: findAllPostDto.title
     };
 
     const authorIdQuery = {
-      contains: findAllPostDto.authorId,
+      contains: findAllPostDto.authorId
     };
 
     const baseMaterialListQuery = {
       some: {
         id: {
-          in: findAllPostDto.baseMaterialIds,
-        },
-      },
+          in: findAllPostDto.baseMaterialIds
+        }
+      }
     };
 
     const cookwareListQuery = {
       some: {
         id: {
-          in: findAllPostDto.cookwareIds,
-        },
-      },
+          in: findAllPostDto.cookwareIds
+        }
+      }
     };
 
     if (findAllPostDto?.title) {
@@ -121,9 +122,9 @@ export class PostService {
       author: {
         select: {
           id: true,
-          name: true,
-        },
-      },
+          name: true
+        }
+      }
     };
 
     if (findAllPostDto.withDetail) {
@@ -132,8 +133,8 @@ export class PostService {
         select: {
           id: true,
           name: true,
-          emoji: true,
-        },
+          emoji: true
+        }
       };
     }
 
@@ -141,25 +142,25 @@ export class PostService {
       skip: findAllPostDto.pageSize * (findAllPostDto.pageNum - 1),
       take: findAllPostDto.pageSize,
       orderBy: {
-        title: 'asc',
+        title: "asc"
       },
       where,
-      select,
+      select
     });
     return {
-      data: { list: result },
+      data: { list: result }
     };
   }
 
   async createPost(createPostDto: CreatePostDto) {
     const post = await this.findPost({
-      title: createPostDto.title,
+      title: createPostDto.title
     });
 
     if (post.data) {
       return {
         success: false,
-        message: '当前菜谱已存在',
+        message: "当前菜谱已存在"
       };
     }
 
@@ -170,34 +171,34 @@ export class PostService {
           content: createPostDto.content,
           published: createPostDto.published,
           author: {
-            connect: { id: createPostDto.authorId },
+            connect: { id: createPostDto.authorId }
           },
           baseMaterialList: {
             connect: createPostDto.baseMaterialIds.map((item) => ({
-              id: item,
-            })),
+              id: item
+            }))
           },
           cookwareList: {
             connect: createPostDto.cookwareIds.map((item) => ({
-              id: item,
-            })),
-          },
+              id: item
+            }))
+          }
         },
         include: {
           author: true,
           baseMaterialList: true, // Include all posts in the returned object
-          cookwareList: true,
-        },
+          cookwareList: true
+        }
       });
 
       return {
         data: null,
-        message: '添加菜谱成功',
+        message: "添加菜谱成功"
       };
     } catch (e) {
       return {
         success: false,
-        message: e.message,
+        message: e.message
       };
     }
   }
@@ -209,29 +210,29 @@ export class PostService {
     const { editPostDto } = params;
     await this.prisma.post.update({
       where: {
-        id: editPostDto.id,
+        id: editPostDto.id
       },
       data: {
         author: {
-          connect: { id: editPostDto.authorId },
+          connect: { id: editPostDto.authorId }
         },
         baseMaterialList: {
-          connect: editPostDto.baseMaterialIds.map((id) => ({ id })),
+          connect: editPostDto.baseMaterialIds.map((id) => ({ id }))
         },
         cookwareList: {
-          connect: editPostDto.cookwareIds.map((id) => ({ id })),
-        },
-      },
+          connect: editPostDto.cookwareIds.map((id) => ({ id }))
+        }
+      }
     });
 
     return {
-      data: null,
+      data: null
     };
   }
 
   async deletePost(where: Prisma.PostWhereUniqueInput): Promise<Post> {
     return this.prisma.post.delete({
-      where,
+      where
     });
   }
 
@@ -241,13 +242,13 @@ export class PostService {
       where,
       data: {
         viewCount: {
-          increment: 1,
-        },
-      },
+          increment: 1
+        }
+      }
     });
 
     return {
-      data: null,
+      data: null
     };
   }
 }

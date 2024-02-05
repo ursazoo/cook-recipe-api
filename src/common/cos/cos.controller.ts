@@ -3,11 +3,10 @@
 import {
   Controller,
   Post,
-  UseInterceptors,
-  UploadedFile,
   UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { CosService } from './cos.service';
 
 @Controller('cos')

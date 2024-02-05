@@ -1,23 +1,24 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
-import { CreateSecondaryMaterialDto } from './dto/create-secondary-material.dto';
-import { UpdateSecondaryMaterialDto } from './dto/update-secondary-material.dto';
-import { DatabaseService } from '../common/database/database.service';
-import { FindAllBaseMaterialDto } from '../base-material/dto/find-base-material.dto';
-import { FindAllSecondaryMaterialDto } from './dto/find-secondary-material.dto';
+import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
+import { CreateSecondaryMaterialDto } from "./dto/create-secondary-material.dto";
+import { UpdateSecondaryMaterialDto } from "./dto/update-secondary-material.dto";
+import { DatabaseService } from "../common/database/database.service";
+import { FindAllSecondaryMaterialDto } from "./dto/find-secondary-material.dto";
 
 @Injectable()
 export class SecondaryMaterialService {
-  constructor(private prisma: DatabaseService) {}
+  constructor(private prisma: DatabaseService) {
+  }
+
   async create(createSecondaryMaterialDto: CreateSecondaryMaterialDto) {
     const secondaryMaterial = await this.findOne({
-      name: createSecondaryMaterialDto.name,
+      name: createSecondaryMaterialDto.name
     });
 
     if (secondaryMaterial.data) {
       return {
         success: false,
-        message: '当前食材二级已存在',
+        message: "当前食材二级已存在"
       };
     }
 
@@ -27,18 +28,18 @@ export class SecondaryMaterialService {
           data: {
             name: createSecondaryMaterialDto.name,
             color: createSecondaryMaterialDto.color,
-            primaryMaterialId: createSecondaryMaterialDto.primaryMaterialId,
-          },
+            primaryMaterialId: createSecondaryMaterialDto.primaryMaterialId
+          }
         });
 
       return {
         data: createdSecondaryMaterial,
-        message: '添加食材二级分类成功',
+        message: "添加食材二级分类成功"
       };
     } catch (e) {
       return {
         success: false,
-        message: e.message,
+        message: e.message
       };
     }
   }
@@ -47,8 +48,8 @@ export class SecondaryMaterialService {
     const result = await this.prisma.secondaryMaterial.findMany({
       where: {
         name: {
-          contains: findAllSecondaryMaterialDto.name || '',
-        },
+          contains: findAllSecondaryMaterialDto.name || ""
+        }
       },
       select: {
         id: true,
@@ -58,54 +59,54 @@ export class SecondaryMaterialService {
         primaryMaterial: {
           select: {
             id: true,
-            name: true,
-          },
+            name: true
+          }
         },
         baseMaterialList: {
           select: {
             id: true,
-            name: true,
-          },
-        },
-      },
+            name: true
+          }
+        }
+      }
     });
 
     return {
       data: {
-        list: result,
-      },
+        list: result
+      }
     };
   }
 
   async findOne(
-    secondaryMaterialWhereUniqueInput: Prisma.SecondaryMaterialWhereUniqueInput,
+    secondaryMaterialWhereUniqueInput: Prisma.SecondaryMaterialWhereUniqueInput
   ) {
     const secondaryMaterial = await this.prisma.secondaryMaterial.findUnique({
-      where: secondaryMaterialWhereUniqueInput,
+      where: secondaryMaterialWhereUniqueInput
     });
 
     return {
-      data: secondaryMaterial,
+      data: secondaryMaterial
     };
   }
 
   async update(
     id: number,
-    updateSecondaryMaterialDto: UpdateSecondaryMaterialDto,
+    updateSecondaryMaterialDto: UpdateSecondaryMaterialDto
   ) {
     try {
       await this.prisma.secondaryMaterial.update({
         where: { id },
-        data: updateSecondaryMaterialDto,
+        data: updateSecondaryMaterialDto
       });
 
       return {
-        message: '修改食材二级分类信息成功',
+        message: "修改食材二级分类信息成功"
       };
     } catch (e) {
       return {
         success: false,
-        message: e.message,
+        message: e.message
       };
     }
   }
@@ -113,16 +114,16 @@ export class SecondaryMaterialService {
   async remove(id: number) {
     try {
       await this.prisma.secondaryMaterial.delete({
-        where: { id },
+        where: { id }
       });
 
       return {
-        message: '删除食材二级分类成功',
+        message: "删除食材二级分类成功"
       };
     } catch (e) {
       return {
         success: false,
-        message: e.message,
+        message: e.message
       };
     }
   }

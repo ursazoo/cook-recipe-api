@@ -1,14 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { Request } from 'express';
-import { User, Prisma } from '@prisma/client';
-import { DatabaseService } from '../common/database/database.service';
-import { makeSalt, encryptPassword } from '../utils/cryptogram';
-import { SignupDTO } from './dto';
-import { FindAllUserDto } from './dto/find-all-user.dto';
+import { Injectable } from "@nestjs/common";
+import { Request } from "express";
+import { Prisma, User } from "@prisma/client";
+import { DatabaseService } from "../common/database/database.service";
+import { encryptPassword, makeSalt } from "../utils/cryptogram";
+import { SignupDTO } from "./dto";
+import { FindAllUserDto } from "./dto/find-all-user.dto";
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: DatabaseService) {}
+  constructor(private prisma: DatabaseService) {
+  }
 
   // 查找用户
   async findAllUser(findAllUserDto: FindAllUserDto): Promise<{ data: any }> {
@@ -17,15 +18,15 @@ export class UserService {
     const where: any = {};
 
     const nameQuery = {
-      contains: findAllUserDto.name,
+      contains: findAllUserDto.name
     };
 
     const idQuery = {
-      contains: findAllUserDto.id,
+      contains: findAllUserDto.id
     };
 
     const accountQuery = {
-      contains: findAllUserDto.account,
+      contains: findAllUserDto.account
     };
 
     if (findAllUserDto?.name) {
@@ -45,7 +46,7 @@ export class UserService {
       take: findAllUserDto.pageSize,
       // cursor,
       orderBy: {
-        name: 'asc',
+        name: "asc"
       },
       where,
       select: {
@@ -54,11 +55,11 @@ export class UserService {
         account: true,
         posts: true,
         role: true,
-        createdTime: true,
-      },
+        createdTime: true
+      }
     });
     return {
-      data: { list: result },
+      data: { list: result }
     };
   }
 
@@ -71,7 +72,7 @@ export class UserService {
     if (user.data) {
       return {
         success: false,
-        message: '当前用户已存在',
+        message: "当前用户已存在"
       };
     }
 
@@ -84,17 +85,17 @@ export class UserService {
           name,
           account,
           salt,
-          password: hashPassword,
-        },
+          password: hashPassword
+        }
       });
 
       return {
-        message: '注册成功',
+        message: "注册成功"
       };
     } catch (e) {
       return {
         success: false,
-        message: e.message,
+        message: e.message
       };
     }
   }
@@ -102,7 +103,7 @@ export class UserService {
   // 查找特定用户
   async findUser(
     userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-    option?: any,
+    option?: any
   ): Promise<any> {
     const user = await this.prisma.user.findUnique({
       where: userWhereUniqueInput,
@@ -113,8 +114,8 @@ export class UserService {
         role: true,
         createdTime: true,
         salt: !!option?.salt,
-        password: !!option?.password,
-      },
+        password: !!option?.password
+      }
     });
 
     console.log(userWhereUniqueInput);
@@ -122,12 +123,12 @@ export class UserService {
     if (!user) {
       return {
         success: false,
-        message: '没有找到该用户',
+        message: "没有找到该用户"
       };
     }
 
     return {
-      data: user,
+      data: user
     };
   }
 
@@ -139,21 +140,21 @@ export class UserService {
     const { where, data } = params;
     return this.prisma.user.update({
       data,
-      where,
+      where
     });
   }
 
   // 删除用户
   async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
     return this.prisma.user.delete({
-      where,
+      where
     });
   }
 
   //   获取当前登录的用户信息
   async getUserInfo(request: Request): Promise<{ data: any }> {
     return {
-      data: (request as any)?.user,
+      data: (request as any)?.user
     };
   }
 }

@@ -8,5 +8,5 @@ export const BUSINESS_ERROR_CODE = {
   // 权限已禁用
   PERMISSION_DISABLED: 10003,
   // 用户已冻结
-  USER_DISABLED: 10004,
+  USER_DISABLED: 10004
 };

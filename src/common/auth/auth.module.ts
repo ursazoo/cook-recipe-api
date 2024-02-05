@@ -1,23 +1,24 @@
 // src/logical/auth/auth.module.ts
-import { Module } from '@nestjs/common';
-import { AuthService } from './auto.service';
+import { Module } from "@nestjs/common";
+import { AuthService } from "./auto.service";
 // import { LocalStrategy } from './local.strategy';
-import { JwtStrategy } from './jwt.strategy';
-import { UserModule } from '../../user/user.module';
-import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
-import { JwtConstants } from './constants';
+import { JwtStrategy } from "./jwt.strategy";
+import { UserModule } from "../../user/user.module";
+import { PassportModule } from "@nestjs/passport";
+import { JwtModule } from "@nestjs/jwt";
+import { JwtConstants } from "./constants";
 
 @Module({
   imports: [
-    PassportModule.register({ defaultStrategy: 'jwt' }),
+    PassportModule.register({ defaultStrategy: "jwt" }),
     JwtModule.register({
       secret: JwtConstants.secret,
-      signOptions: { expiresIn: '8h' }, // token 过期时效
+      signOptions: { expiresIn: "8h" } // token 过期时效
     }),
-    UserModule,
+    UserModule
   ],
   providers: [AuthService, JwtStrategy], // LocalStrategy
-  exports: [AuthService],
+  exports: [AuthService]
 })
-export class AuthModule {}
+export class AuthModule {
+}

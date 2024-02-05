@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import moment from 'moment';
+import { HttpService } from '@nestjs/axios';
+import { getConfig } from '../../utils';
 // import COS from 'cos-nodejs-sdk-v5';
 // import STS from 'qcloud-cos-sts';
 
@@ -8,14 +10,12 @@ const STS = require('qcloud-cos-sts');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const COS = require('cos-nodejs-sdk-v5');
 
-import { HttpService } from '@nestjs/axios';
-import { getConfig } from '../../utils';
-
 // app.service.ts
 
 @Injectable()
 export class CosService {
   constructor(private readonly httpService: HttpService) {}
+
   private secretId: string = getConfig().COS.SECRET_ID;
   private secretKey: string = getConfig().COS.SECRET_KEY;
   private cos: any = {};

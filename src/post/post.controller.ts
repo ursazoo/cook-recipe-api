@@ -1,37 +1,28 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Patch,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Body, Controller, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
 
-import { PostService } from './post.service';
-import { RBACGuard } from '../common/guards/rbac/rbac.guard';
-import { RoleConstants } from '../common/auth/constants';
-import { ViewPostDto, CreatePostDto, FindAllPostDto, EditPostDto } from './dto';
+import { PostService } from "./post.service";
+import { CreatePostDto, EditPostDto, FindAllPostDto, ViewPostDto } from "./dto";
 
 // import { Post as PostModel } from '@prisma/client';
 
-@Controller('post')
+@Controller("post")
 export class PostController {
-  constructor(private readonly postService: PostService) {}
+  constructor(private readonly postService: PostService) {
+  }
 
   // @UseGuards(AuthGuard('jwt'))
-  @Post('/list')
+  @Post("/list")
   async findAllPost(@Body() findAllPostDto: FindAllPostDto) {
     console.log(findAllPostDto);
     return this.postService.posts(findAllPostDto);
   }
 
   // @UseGuards(AuthGuard('jwt'))
-  @Get(':id')
+  @Get(":id")
   async findPost(@Param() param: { id: number }) {
     return this.postService.findPost({
-      id: param.id,
+      id: param.id
     });
   }
 
@@ -48,25 +39,25 @@ export class PostController {
 
   // 创建菜谱
   // @UseGuards(new RBACGuard(RoleConstants.ADMIN))
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard("jwt"))
   @Post()
   async createPost(@Body() createPostDto: CreatePostDto) {
     return this.postService.createPost(createPostDto);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard("jwt"))
   @Patch()
   async editPost(@Body() editPostDto: EditPostDto) {
     return this.postService.editPost({
       where: {
-        id: editPostDto.id,
+        id: editPostDto.id
       },
-      editPostDto,
+      editPostDto
     });
   }
 
   // @UseGuards(AuthGuard('jwt'))
-  @Patch('/view')
+  @Patch("/view")
   async viewPost(@Body() viewPostDto: ViewPostDto) {
     return this.postService.viewPost({ where: viewPostDto });
   }

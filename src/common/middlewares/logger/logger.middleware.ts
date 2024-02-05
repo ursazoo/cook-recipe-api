@@ -1,6 +1,5 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
-import { Request, Response } from 'express';
-import { Logger } from '../../../utils/log4js';
+import { Request, Response } from "express";
+import { Logger } from "../../../utils/log4js";
 // @Injectable()
 // export class LoggerMiddleware implements NestMiddleware {
 //   use(req: Request, res: Response, next: () => void) {
@@ -33,8 +32,8 @@ export function LoggerMiddleware(req: Request, res: Response, next: () => any) {
     Parmas: ${JSON.stringify(req.params)}
     Query: ${JSON.stringify(req.query)}
     Body: ${JSON.stringify(
-      req.body,
-    )} \n  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    req.body
+  )} \n  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   `;
   // 根据状态码，进行日志类型区分
   if (code >= 500) {

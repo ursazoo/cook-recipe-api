@@ -1,5 +1,5 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateBaseMaterialDto } from './create-base-material.dto';
+import { PartialType } from "@nestjs/mapped-types";
+import { CreateBaseMaterialDto } from "./create-base-material.dto";
 
 export class UpdateBaseMaterialDto extends PartialType(CreateBaseMaterialDto) {
   // 食材名称

@@ -1,24 +1,26 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
-import { CreateBaseMaterialDto } from './dto/create-base-material.dto';
-import { UpdateBaseMaterialDto } from './dto/update-base-material.dto';
-import { DatabaseService } from '../common/database/database.service';
-import { FindAllBaseMaterialDto } from './dto/find-base-material.dto';
+import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
+import { CreateBaseMaterialDto } from "./dto/create-base-material.dto";
+import { UpdateBaseMaterialDto } from "./dto/update-base-material.dto";
+import { DatabaseService } from "../common/database/database.service";
+import { FindAllBaseMaterialDto } from "./dto/find-base-material.dto";
 
 @Injectable()
 export class BaseMaterialService {
-  constructor(private prisma: DatabaseService) {}
+  constructor(private prisma: DatabaseService) {
+  }
+
   async create(createBaseMaterialDto: CreateBaseMaterialDto) {
     const baseMaterial = await this.prisma.baseMaterial.findUnique({
       where: {
-        name: createBaseMaterialDto.name,
-      },
+        name: createBaseMaterialDto.name
+      }
     });
 
     if (baseMaterial?.id) {
       return {
         success: false,
-        message: '当前食材已存在',
+        message: "当前食材已存在"
       };
     }
 
@@ -26,20 +28,20 @@ export class BaseMaterialService {
       await this.prisma.baseMaterial.create({
         data: {
           name: createBaseMaterialDto.name,
-          emoji: createBaseMaterialDto.emoji || '',
+          emoji: createBaseMaterialDto.emoji || "",
           count: createBaseMaterialDto.count || 0,
-          color: createBaseMaterialDto.color || 'transparent',
-          secondaryMaterialId: createBaseMaterialDto.secondaryMaterialId,
-        },
+          color: createBaseMaterialDto.color || "transparent",
+          secondaryMaterialId: createBaseMaterialDto.secondaryMaterialId
+        }
       });
 
       return {
-        message: '添加食材成功',
+        message: "添加食材成功"
       };
     } catch (e) {
       return {
         success: false,
-        message: e.message,
+        message: e.message
       };
     }
   }
@@ -48,9 +50,9 @@ export class BaseMaterialService {
     const result = await this.prisma.baseMaterial.findMany({
       where: {
         name: {
-          contains: findAllBaseMaterialDto.name || '',
+          contains: findAllBaseMaterialDto.name || ""
         },
-        secondaryMaterialId: findAllBaseMaterialDto.secondaryMaterialId,
+        secondaryMaterialId: findAllBaseMaterialDto.secondaryMaterialId
       },
       select: {
         id: true,
@@ -60,30 +62,30 @@ export class BaseMaterialService {
         secondaryMaterial: {
           select: {
             id: true,
-            name: true,
-          },
+            name: true
+          }
         },
         posts: true,
-        createdTime: true,
-      },
+        createdTime: true
+      }
     });
 
     return {
       data: {
-        list: result,
-      },
+        list: result
+      }
     };
   }
 
   async findOne(
-    baseMaterialWhereUniqueInput: Prisma.BaseMaterialWhereUniqueInput,
+    baseMaterialWhereUniqueInput: Prisma.BaseMaterialWhereUniqueInput
   ) {
     const baseMaterial = await this.prisma.user.findUnique({
-      where: baseMaterialWhereUniqueInput,
+      where: baseMaterialWhereUniqueInput
     });
 
     return {
-      data: baseMaterial,
+      data: baseMaterial
     };
   }
 
@@ -91,16 +93,16 @@ export class BaseMaterialService {
     try {
       await this.prisma.baseMaterial.update({
         where: { id },
-        data: updateBaseMaterialDto,
+        data: updateBaseMaterialDto
       });
 
       return {
-        message: '修改食材信息成功',
+        message: "修改食材信息成功"
       };
     } catch (e) {
       return {
         success: false,
-        message: e.message,
+        message: e.message
       };
     }
   }
@@ -108,16 +110,16 @@ export class BaseMaterialService {
   async remove(id: number) {
     try {
       await this.prisma.baseMaterial.delete({
-        where: { id },
+        where: { id }
       });
 
       return {
-        message: '删除食材成功',
+        message: "删除食材成功"
       };
     } catch (e) {
       return {
         success: false,
-        message: e.message,
+        message: e.message
       };
     }
     // return `This action removes a #${id} base-material`;

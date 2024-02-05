@@ -1,12 +1,7 @@
-import {
-  CallHandler,
-  ExecutionContext,
-  Injectable,
-  NestInterceptor,
-} from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Logger } from '../../utils/log4js';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { Logger } from "../../utils/log4js";
 
 @Injectable()
 export class TransformInterceptor implements NestInterceptor {
@@ -37,9 +32,9 @@ export class TransformInterceptor implements NestInterceptor {
           code: 200,
           success: data.success === undefined,
           data: data.data || null,
-          message: data.message || 'success',
+          message: data.message || "success"
         };
-      }),
+      })
     );
   }
 }

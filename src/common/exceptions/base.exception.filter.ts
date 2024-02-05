@@ -2,14 +2,8 @@
 /**
  * 捕获所有异常
  */
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
-import { Logger } from '../../utils/log4js';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from "@nestjs/common";
+import { Logger } from "../../utils/log4js";
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -41,12 +35,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
      * message: 只要没有抛出HTTP错误，message 就是自己定义的，默认为 success
      */
 
-    console.log('====base=====');
+    console.log("====base=====");
     response.status(status).send({
       code: status,
       success: false,
       data: null,
-      message: (exception as any).message,
+      message: (exception as any).message
     });
   }
 }

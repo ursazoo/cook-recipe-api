@@ -1,8 +1,8 @@
-import axios, { Method } from 'axios';
-import { getConfig } from './index';
+import axios, { Method } from "axios";
+import { getConfig } from "./index";
 
 const {
-  FEISHU_CONFIG: { FEISHU_URL },
+  FEISHU_CONFIG: { FEISHU_URL }
 } = getConfig();
 
 /**
@@ -12,7 +12,7 @@ const request = async ({ url, option = {} }) => {
   try {
     return axios.request({
       url,
-      ...option,
+      ...option
     });
   } catch (error) {
     throw error;
@@ -36,13 +36,13 @@ export interface IRequest {
  * @description: 带 version 的通用 api 请求
  */
 const methodWithVersion = async ({
-  url,
-  method,
-  headers,
-  params = {},
-  query = {},
-}: IMethod): Promise<IRequest> => {
-  let sendUrl = '';
+                                   url,
+                                   method,
+                                   headers,
+                                   params = {},
+                                   query = {}
+                                 }: IMethod): Promise<IRequest> => {
+  let sendUrl = "";
   if (/^(http:\/\/|https:\/\/)/.test(url)) {
     sendUrl = url;
   } else {
@@ -53,14 +53,14 @@ const methodWithVersion = async ({
       axios({
         headers: {
           ...headers,
-          'Content-Type': 'application/json; charset=utf-8',
+          "Content-Type": "application/json; charset=utf-8"
         },
         url: sendUrl,
         method,
         params: query,
         data: {
-          ...params,
-        },
+          ...params
+        }
       })
         .then(({ data, status }) => {
           resolve({ data, code: status });

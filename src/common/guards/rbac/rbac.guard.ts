@@ -12,6 +12,7 @@ export class RBACGuard implements CanActivate {
 
   // role 取值来自使用 RBACGuard 守卫时传入的权限
   constructor(private readonly role: number) {}
+
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {

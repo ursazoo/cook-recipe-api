@@ -1,22 +1,23 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
-import { CreatePrimaryMaterialDto } from './dto/create-primary-material.dto';
-import { UpdatePrimaryMaterialDto } from './dto/update-primary-material.dto';
-import { DatabaseService } from '../common/database/database.service';
+import { Injectable } from "@nestjs/common";
+import { Prisma } from "@prisma/client";
+import { CreatePrimaryMaterialDto } from "./dto/create-primary-material.dto";
+import { UpdatePrimaryMaterialDto } from "./dto/update-primary-material.dto";
+import { DatabaseService } from "../common/database/database.service";
 
 @Injectable()
 export class PrimaryMaterialService {
-  constructor(private prisma: DatabaseService) {}
+  constructor(private prisma: DatabaseService) {
+  }
 
   async create(createPrimaryMaterialDto: CreatePrimaryMaterialDto) {
     const primaryMaterial = await this.findOne({
-      name: createPrimaryMaterialDto.name,
+      name: createPrimaryMaterialDto.name
     });
 
     if (primaryMaterial.data) {
       return {
         success: false,
-        message: '当前食材已存在',
+        message: "当前食材已存在"
       };
     }
 
@@ -24,19 +25,19 @@ export class PrimaryMaterialService {
       const createdPrimaryMaterial = await this.prisma.primaryMaterial.create({
         data: {
           name: createPrimaryMaterialDto.name,
-          color: createPrimaryMaterialDto.color,
+          color: createPrimaryMaterialDto.color
           // color: createPrimaryMaterialDto.color,
-        },
+        }
       });
 
       return {
         data: createdPrimaryMaterial,
-        message: '添加食材一级分类成功',
+        message: "添加食材一级分类成功"
       };
     } catch (e) {
       return {
         success: false,
-        message: e.message,
+        message: e.message
       };
     }
   }
@@ -63,20 +64,20 @@ export class PrimaryMaterialService {
                   select: {
                     id: true,
                     name: true,
-                    color: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
+                    color: true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     });
 
     return {
       data: {
-        list: result,
-      },
+        list: result
+      }
     };
   }
 
@@ -84,26 +85,26 @@ export class PrimaryMaterialService {
     const result = await this.prisma.primaryMaterial.findMany({
       where: {},
       include: {
-        secondaryMaterialList: true,
-      },
+        secondaryMaterialList: true
+      }
     });
 
     return {
       data: {
-        list: result,
-      },
+        list: result
+      }
     };
   }
 
   async findOne(
-    primaryMaterialWhereUniqueInput: Prisma.PrimaryMaterialWhereUniqueInput,
+    primaryMaterialWhereUniqueInput: Prisma.PrimaryMaterialWhereUniqueInput
   ) {
     const primaryMaterial = await this.prisma.primaryMaterial.findUnique({
-      where: primaryMaterialWhereUniqueInput,
+      where: primaryMaterialWhereUniqueInput
     });
 
     return {
-      data: primaryMaterial,
+      data: primaryMaterial
     };
   }
 
@@ -111,16 +112,16 @@ export class PrimaryMaterialService {
     try {
       await this.prisma.primaryMaterial.update({
         where: { id },
-        data: updatePrimaryMaterialDto,
+        data: updatePrimaryMaterialDto
       });
 
       return {
-        message: '修改食材一级分类信息成功',
+        message: "修改食材一级分类信息成功"
       };
     } catch (e) {
       return {
         success: false,
-        message: e.message,
+        message: e.message
       };
     }
   }
@@ -128,16 +129,16 @@ export class PrimaryMaterialService {
   async remove(id: number) {
     try {
       await this.prisma.primaryMaterial.delete({
-        where: { id },
+        where: { id }
       });
 
       return {
-        message: '删除食材一级分类成功',
+        message: "删除食材一级分类成功"
       };
     } catch (e) {
       return {
         success: false,
-        message: e.message,
+        message: e.message
       };
     }
   }
